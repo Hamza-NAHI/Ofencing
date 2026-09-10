@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Contact Maison d'Escrime for private fencing coaching in Morocco." />
-  <title>Contact — Maison d'Escrime</title>
+  <meta name="description" content="Enquire about fencing sessions with Omar Nahi at Maison d'Escrime in Morocco." />
+  <title>Contact Omar Nahi — Maison d'Escrime</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
@@ -22,6 +22,14 @@
       <a href="index.html#calendar">Training</a>
       <a class="nav-cta active" href="contact.html">Book a session</a>
     </nav>
+    <label class="language-switcher" hidden>
+      <span class="sr-only">Language</span>
+      <select data-language-select aria-label="Language" dir="ltr" data-no-translate>
+        <option value="fr" lang="fr">Français</option>
+        <option value="en" lang="en">English</option>
+        <option value="ar" lang="ar">العربية</option>
+      </select>
+    </label>
   </header>
 
   <main>
@@ -29,13 +37,13 @@
       <p class="eyebrow">Start here</p>
       <h1>Your first point starts<br><em>with a hello.</em></h1>
       <p class="inner-lede">
-        Tell us your level, your city and what you want from fencing. We will suggest the right format.
+        Tell Omar your level, your city and what you want from fencing to discuss a suitable session.
       </p>
     </section>
 
     <section class="shell contact-grid section-pad">
       <div class="contact-info">
-        <h2>Let’s talk fencing.</h2>
+        <h2>Train with Omar Nahi.</h2>
         <p>For private lessons, club sessions, workshops or competition preparation.</p>
         <div class="contact-lines">
           <div><span>Email</span><a href="mailto:hello@maisondescrime.ma">hello@maisondescrime.ma</a></div>
@@ -48,25 +56,25 @@
       <form class="contact-form" onsubmit="event.preventDefault(); document.getElementById('form-note').hidden=false;">
         <label>
           Your name
-          <input type="text" name="name" placeholder="Name" required>
+          <input type="text" name="name" dir="auto" placeholder="Name" required>
         </label>
         <label>
           Email or phone
-          <input type="text" name="contact" placeholder="How should we reach you?" required>
+          <input type="text" name="contact" dir="auto" placeholder="How should we reach you?" required>
         </label>
         <label>
           Your fencing level
           <select name="level">
-            <option>Complete beginner</option>
-            <option>Beginner</option>
-            <option>Intermediate</option>
-            <option>Competitor</option>
-            <option>Coach / club inquiry</option>
+            <option value="Complete beginner">Complete beginner</option>
+            <option value="Beginner">Beginner</option>
+            <option value="Intermediate">Intermediate</option>
+            <option value="Competitor">Competitor</option>
+            <option value="Coach / club inquiry">Coach / club inquiry</option>
           </select>
         </label>
         <label>
           Message
-          <textarea name="message" rows="5" placeholder="City, availability, goals..."></textarea>
+          <textarea name="message" dir="auto" rows="5" placeholder="City, availability, goals..."></textarea>
         </label>
         <button class="button button-dark" type="submit">Send inquiry</button>
         <p id="form-note" class="form-note" hidden>This static demo does not send the form yet. Connect it to Formspree, Netlify Forms or a backend later.</p>
@@ -79,6 +87,8 @@
     <div class="footer-links"><a href="coach.html">Coach</a><a href="events.html">Events</a><a href="index.html#calendar">Training</a><a href="contact.html">Contact</a></div>
     <div class="footer-meta"><span>Instagram · @maisondescrime</span><span>© <span data-year></span> Maison d'Escrime</span></div>
   </footer>
+  <script src="js/translations.js"></script>
+  <script src="js/i18n.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

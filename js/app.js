@@ -11,17 +11,21 @@ if (toggle && nav) {
   });
 }
 
-if (window.siteData) {
+function renderSiteData() {
+  if (!window.siteData) return;
+  const translate = window.siteI18n?.t || (value => value);
+  const escape = value => String(value).replace(/[&<>"']/g, character => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[character]));
+  const t = value => escape(translate(value));
   const homeEvents = document.getElementById("home-events");
   if (homeEvents) {
     homeEvents.innerHTML = `<div class="events-cards">${window.siteData.events.slice(0, 3).map(event => `
       <article class="event-card">
-        <div class="date">${event.date}<small>${event.month}</small></div>
+        <div class="date">${t(event.date)}<small>${t(event.month)}</small></div>
         <div>
-          <h3>${event.title}</h3>
-          <p>${event.description}</p>
+          <h3>${t(event.title)}</h3>
+          <p>${t(event.description)}</p>
         </div>
-        <div class="event-meta"><span>${event.location}</span><span>${event.type}</span></div>
+        <div class="event-meta"><span>${t(event.location)}</span><span>${t(event.type)}</span></div>
       </article>
     `).join("")}</div>`;
   }
@@ -30,14 +34,14 @@ if (window.siteData) {
   if (allEvents) {
     allEvents.innerHTML = window.siteData.events.map(event => `
       <article class="event-row">
-        <div class="event-date">${event.date}<br><small>${event.month}</small></div>
+        <div class="event-date">${t(event.date)}<br><small>${t(event.month)}</small></div>
         <div>
-          <h2>${event.title}</h2>
-          <p>${event.description}</p>
+          <h2>${t(event.title)}</h2>
+          <p>${t(event.description)}</p>
         </div>
         <div class="event-side">
-          <span>${event.location}</span>
-          <span>${event.type}</span>
+          <span>${t(event.location)}</span>
+          <span>${t(event.type)}</span>
         </div>
       </article>
     `).join("");
@@ -47,10 +51,13 @@ if (window.siteData) {
   if (calendar) {
     calendar.innerHTML = window.siteData.training.map(slot => `
       <div class="calendar-row">
-        <span class="day">${slot.day}</span>
-        <span class="slot">${slot.time}</span>
-        <span class="type">${slot.type}</span>
+        <span class="day">${t(slot.day)}</span>
+        <span class="slot" dir="ltr">${t(slot.time)}</span>
+        <span class="type">${t(slot.type)}</span>
       </div>
     `).join("");
   }
 }
+
+renderSiteData();
+document.addEventListener("languagechange", renderSiteData);
