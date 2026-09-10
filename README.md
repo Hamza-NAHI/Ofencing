@@ -1,10 +1,10 @@
 # Maison d'Escrime — static fencing coach website
 
-A responsive static website concept for a fencing coach in Morocco.
+A responsive static website for Moroccan épée fencer and coach Omar Nahi.
 
 ## Pages
 - `index.html` — welcoming homepage, fencing introduction, coach preview, upcoming events, weekly training calendar
-- `coach.html` — coach profile and coaching philosophy
+- `coach.html` — coach biography, selected competition results and training goals
 - `events.html` — upcoming events list
 - `contact.html` — static inquiry form / contact information
 - `styles2.css` — all visual styles
@@ -73,3 +73,11 @@ A future content model could be:
 - contact details
 
 The current separation of event/calendar data makes this migration easy.
+
+## Omar Nahi content
+
+Coach copy is in `index.html`, `coach.html` and `contact.html`. Research sources and the limits of each claim are recorded in [docs/coach-sources.md](docs/coach-sources.md).
+
+The portrait is explicitly a placeholder. Replace it with an approved photo of Omar before launch. Coaching years, languages, qualifications and personal quotations have not been confirmed and are not asserted in the biography.
+
+The existing contact details, inquiry form, events and weekly schedule remain demo content; confirm real contact details and availability with Omar before publishing them as live information. The static form does not deliver messages.
