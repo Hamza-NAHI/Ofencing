@@ -26,7 +26,7 @@
       textRecords.push({ node, key, original: node.nodeValue });
     }
   }
-  document.querySelectorAll("[placeholder], [alt], [aria-label], meta[name='description']").forEach(element => {
+  document.querySelectorAll("[placeholder], [alt], [aria-label], meta[name='description'], meta[data-seo-translatable]").forEach(element => {
     for (const attribute of ["placeholder", "alt", "aria-label", "content"]) {
       if (!element.hasAttribute(attribute)) continue;
       const key = element.getAttribute(attribute);
@@ -43,6 +43,8 @@
     language = next;
     document.documentElement.lang = language;
     document.documentElement.dir = language === "ar" ? "rtl" : "ltr";
+    const locale = document.querySelector('meta[property="og:locale"]');
+    if (locale) locale.setAttribute("content", { fr: "fr_FR", en: "en_US", ar: "ar_MA" }[language]);
     textRecords.forEach(({ node, key, original }) => {
       node.nodeValue = language === "en" ? original : original.replace(/\S[\s\S]*\S|\S/, () => t(key));
     });
