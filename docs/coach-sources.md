@@ -19,6 +19,6 @@ The medal details above were read from secondary competition tables, which name 
 - Removed unsupported “12+ years coaching”, FR / AR / EN language proficiency and the attributed placeholder quote.
 - Replaced the three-weapon claim with his documented competition weapon, épée. Training language no longer references right-of-way priority.
 - The biography does not assert coaching diplomas, a start date, a current club, a number of national titles or Olympic participation.
-- Keep the generic illustration labelled as a placeholder until an approved portrait is supplied.
+- On 10 September 2026, the user supplied the coach portrait and requested its use. The original JPEG is stored as `assets/omar-nahi-coach.jpeg` and displayed on the homepage and coach profile.
 - Training topics are retained as goals to discuss, not documented claims about his personal teaching philosophy.
 - Contact details, form delivery, demonstration events and actual weekly availability still need operational setup. This coach-content update does not activate them.

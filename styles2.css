@@ -262,3 +262,7 @@ html[dir="rtl"] blockquote{padding-left:0;padding-inline-start:24px;border-left:
   html[dir="rtl"] .inner-hero h1{font-size:44px}
   html[dir="rtl"] .event-note h2,html[dir="rtl"] .contact-info h2{font-size:36px}
 }
+
+
+/* Keep Omar and his fencing mask in frame on desktop and mobile. */
+.coach-photo img,.profile-image img{display:block;width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;object-position:30% center}

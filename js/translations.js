@@ -13,8 +13,6 @@ window.siteTranslations = {
     "Omar Nahi.": "Omar Nahi.",
     "Fencing for Morocco.": "L’escrime aux couleurs du Maroc.",
     "Moroccan épée fencer, international competitor and your coach at Maison d’Escrime.": "Épéiste marocain, compétiteur international et votre coach à Maison d’Escrime.",
-    "Illustrated portrait placeholder; not a photograph of Omar Nahi": "Illustration provisoire ; il ne s’agit pas d’une photographie d’Omar Nahi",
-    "Portrait coming soon.": "Portrait bientôt disponible.",
     "Meet your coach": "Rencontrez votre coach",
     "From international competition to your first touch.": "De la compétition internationale à votre première touche.",
     "Omar Nahi is a Moroccan fencer whose competitive weapon is the épée. He has represented Morocco at international events, including the World Championships and the African Championships.": "Omar Nahi est un escrimeur marocain qui pratique l’épée en compétition. Il a représenté le Maroc lors d’épreuves internationales, notamment aux Championnats du monde et aux Championnats d’Afrique.",
@@ -119,7 +117,6 @@ window.siteTranslations = {
     "Train with structure while keeping the playful, tactical side that makes fencing addictive.": "Entraînez-vous avec méthode tout en gardant le plaisir et la dimension tactique qui donnent envie de revenir.",
     "Community": "Communauté",
     "From first lesson to competition day, fencing gives you a tribe and a language of its own.": "De la première leçon au jour de la compétition, l’escrime vous offre un collectif et un langage partagé.",
-    "Portrait coming soon": "Portrait bientôt disponible",
     "Your coach": "Votre coach",
     "Experience on the piste.": "L’expérience de la piste.",
     "Omar Nahi is a Moroccan épée fencer and coach who has represented Morocco internationally. His team results include gold at the 2019 African Championships and silver at the 2022 and 2023 editions.": "Omar Nahi est un épéiste et coach marocain qui a représenté le Maroc à l’international. Son palmarès par équipes comprend l’or aux Championnats d’Afrique 2019 et l’argent lors des éditions 2022 et 2023.",
@@ -165,7 +162,8 @@ window.siteTranslations = {
     "Small group": "Petit groupe",
     "Youth + private": "Jeunes + cours particuliers",
     "Private + competition": "Cours particuliers + compétition",
-    "Workshops / sparring": "Ateliers / assauts"
+    "Workshops / sparring": "Ateliers / assauts",
+    "Omar Nahi holding a fencing mask in a fencing hall": "Omar Nahi tenant un masque d’escrime dans une salle d’armes"
   },
   "ar": {
     "Meet Omar Nahi, Moroccan épée fencer and coach. Explore his international background and African Championships team medals.": "تعرّف على عمر ناهي، المبارز المغربي بسيف المبارزة والمدرّب. اكتشف مسيرته الدولية وميدالياته ضمن الفرق في البطولات الإفريقية.",
@@ -180,8 +178,6 @@ window.siteTranslations = {
     "Omar Nahi.": "عمر ناهي.",
     "Fencing for Morocco.": "مبارزة بألوان المغرب.",
     "Moroccan épée fencer, international competitor and your coach at Maison d’Escrime.": "مبارز مغربي بسيف المبارزة، ومنافس دولي، ومدرّبك في Maison d’Escrime.",
-    "Illustrated portrait placeholder; not a photograph of Omar Nahi": "رسم مؤقت؛ ليس صورة فوتوغرافية لعمر ناهي",
-    "Portrait coming soon.": "الصورة الشخصية قريباً.",
     "Meet your coach": "تعرّف على مدرّبك",
     "From international competition to your first touch.": "من المنافسات الدولية إلى لمستك الأولى.",
     "Omar Nahi is a Moroccan fencer whose competitive weapon is the épée. He has represented Morocco at international events, including the World Championships and the African Championships.": "عمر ناهي مبارز مغربي يتنافس في سيف المبارزة. مثّل المغرب في منافسات دولية، من بينها بطولات العالم والبطولات الإفريقية.",
@@ -286,7 +282,6 @@ window.siteTranslations = {
     "Train with structure while keeping the playful, tactical side that makes fencing addictive.": "تدرّب بنظام مع الحفاظ على المتعة والجانب التكتيكي اللذين يشجعانك على الاستمرار.",
     "Community": "روح الجماعة",
     "From first lesson to competition day, fencing gives you a tribe and a language of its own.": "من الدرس الأول إلى يوم المنافسة، تمنحك المبارزة جماعة تنتمي إليها ولغة مشتركة.",
-    "Portrait coming soon": "الصورة الشخصية قريباً",
     "Your coach": "مدرّبك",
     "Experience on the piste.": "خبرة على حلبة المبارزة.",
     "Omar Nahi is a Moroccan épée fencer and coach who has represented Morocco internationally. His team results include gold at the 2019 African Championships and silver at the 2022 and 2023 editions.": "عمر ناهي مبارز ومدرّب مغربي في سيف المبارزة مثّل المغرب دولياً. وتشمل نتائجه ضمن الفرق ذهبية البطولة الإفريقية 2019 وفضية نسختَي 2022 و2023.",
@@ -332,6 +327,7 @@ window.siteTranslations = {
     "Small group": "مجموعة صغيرة",
     "Youth + private": "ناشئون + دروس فردية",
     "Private + competition": "دروس فردية + منافسات",
-    "Workshops / sparring": "ورش / نزالات"
+    "Workshops / sparring": "ورش / نزالات",
+    "Omar Nahi holding a fencing mask in a fencing hall": "عمر ناهي يحمل قناع مبارزة في قاعة للمبارزة"
   }
 };
