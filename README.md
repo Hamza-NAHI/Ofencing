@@ -1,4 +1,4 @@
-# Maison d'Escrime — static fencing coach website
+# ONescrime — static fencing coach website
 
 A responsive static website for Moroccan épée fencer and coach Omar Nahi.
 
@@ -102,6 +102,12 @@ Each page has its own title and description, an HTTPS canonical URL, a robots me
 
 ## Social preview image
 
-`og.png` is the 1734 × 907 social-sharing card based on the approved coach portrait, with the requested text “Maître Omar Nahi”. All four pages reference its absolute HTTPS URL in Open Graph and Twitter metadata, including dimensions, MIME type and translated alternative text. Twitter uses `summary_large_image`. The card is served as a static file without requiring JavaScript. The on-page brand and existing page titles are unchanged.
+`og.png` is the 1734 × 907 social-sharing card based on the approved coach portrait, with the requested text “Maître Omar Nahi”. All four pages reference its absolute HTTPS URL in Open Graph and Twitter metadata, including dimensions, MIME type and translated alternative text. Twitter uses `summary_large_image`. The card is served as a static file without requiring JavaScript. The preview card retains the requested “Maître Omar Nahi” caption; the site brand and page metadata use ONescrime.
 
 Deploy this revision before checking public link previews. Sharing services may retain an older cached preview until they fetch the page again. If the production domain changes, update the image URLs along with the canonical URLs.
+
+## Brand
+
+ONescrime stands for Omar Nahi escrime. The header and footer use the O/N monogram; the matching favicon uses the site’s burgundy colour. Names and translated metadata use ONescrime in French, English and Arabic. The existing production URL remains `https://ofencing.vercel.app`.
+
+The previous demo email address and Instagram handle have been replaced with translated “coming soon” labels. Add verified contact details when available; no new email address or social account has been assumed.
