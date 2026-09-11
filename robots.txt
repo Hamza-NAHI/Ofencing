@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ofencing.vercel.app/sitemap.xml
