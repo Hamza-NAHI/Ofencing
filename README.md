@@ -99,3 +99,9 @@ Vercel handles HTTP → HTTPS with a permanent 308 redirect at its edge (verifie
 Each page has its own title and description, an HTTPS canonical URL, a robots meta tag and Open Graph/X text metadata. `js/i18n.js` translates the title, description and social text and updates the Open Graph locale when switching languages. Static HTML metadata is English; French is still the default for visitors with JavaScript. Crawlers that do not execute JavaScript receive the English metadata. Language query variants share the page’s canonical URL; the sitemap lists the four main pages, not separate server-rendered language versions. No unsupported `hreflang` claims are made.
 
 `robots.txt` allows crawling and declares `sitemap.xml`. Neither a sitemap nor a robots directive guarantees indexing. The changes in `dev` take effect on the public website only when that revision is deployed. HSTS does not request subdomain inclusion or preload.
+
+## Social preview image
+
+`og.png` is the 1734 × 907 social-sharing card based on the approved coach portrait, with the requested text “Maître Omar Nahi”. All four pages reference its absolute HTTPS URL in Open Graph and Twitter metadata, including dimensions, MIME type and translated alternative text. Twitter uses `summary_large_image`. The card is served as a static file without requiring JavaScript. The on-page brand and existing page titles are unchanged.
+
+Deploy this revision before checking public link previews. Sharing services may retain an older cached preview until they fetch the page again. If the production domain changes, update the image URLs along with the canonical URLs.

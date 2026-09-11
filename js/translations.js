@@ -163,7 +163,8 @@ window.siteTranslations = {
     "Fencing Events & Training in Morocco | Maison d’Escrime": "Événements et stages d’escrime au Maroc | Maison d’Escrime",
     "Explore fencing events, workshops, training camps and open sessions in Morocco. Find upcoming dates and discuss competition preparation with Omar Nahi.": "Retrouvez les événements, ateliers, stages et séances libres d’escrime au Maroc. Consultez les dates et préparez vos compétitions avec Omar Nahi.",
     "Contact Omar Nahi | Fencing Sessions – Maison d’Escrime": "Contacter Omar Nahi | Cours d’escrime – Maison d’Escrime",
-    "Contact Omar Nahi about fencing sessions in Morocco. Share your level, city and goals to discuss private lessons, club training or competition preparation.": "Contactez Omar Nahi pour vos séances d’escrime au Maroc. Précisez votre niveau, votre ville et vos objectifs : cours, club ou préparation aux compétitions."
+    "Contact Omar Nahi about fencing sessions in Morocco. Share your level, city and goals to discuss private lessons, club training or competition preparation.": "Contactez Omar Nahi pour vos séances d’escrime au Maroc. Précisez votre niveau, votre ville et vos objectifs : cours, club ou préparation aux compétitions.",
+    "Maître Omar Nahi holding a fencing mask": "Maître Omar Nahi tenant un masque d’escrime"
   },
   "ar": {
     "Menu": "القائمة",
@@ -328,6 +329,7 @@ window.siteTranslations = {
     "Fencing Events & Training in Morocco | Maison d’Escrime": "فعاليات وتدريبات المبارزة في المغرب | Maison d’Escrime",
     "Explore fencing events, workshops, training camps and open sessions in Morocco. Find upcoming dates and discuss competition preparation with Omar Nahi.": "استكشف فعاليات المبارزة والورش والمعسكرات والحصص المفتوحة في المغرب. اطّلع على المواعيد القادمة وناقش الاستعداد للمنافسات مع عمر ناهي.",
     "Contact Omar Nahi | Fencing Sessions – Maison d’Escrime": "تواصل مع عمر ناهي | حصص المبارزة – Maison d’Escrime",
-    "Contact Omar Nahi about fencing sessions in Morocco. Share your level, city and goals to discuss private lessons, club training or competition preparation.": "تواصل مع عمر ناهي بشأن حصص المبارزة في المغرب. شارك مستواك ومدينتك وأهدافك لمناقشة دروس فردية أو تدريب في الأندية أو الاستعداد للمنافسات."
+    "Contact Omar Nahi about fencing sessions in Morocco. Share your level, city and goals to discuss private lessons, club training or competition preparation.": "تواصل مع عمر ناهي بشأن حصص المبارزة في المغرب. شارك مستواك ومدينتك وأهدافك لمناقشة دروس فردية أو تدريب في الأندية أو الاستعداد للمنافسات.",
+    "Maître Omar Nahi holding a fencing mask": "الأستاذ عمر ناهي يحمل قناع مبارزة"
   }
 };
