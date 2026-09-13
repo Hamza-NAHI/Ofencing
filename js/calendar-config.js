@@ -3,7 +3,7 @@
 // Alternatively paste only the https://calendar.google.com/calendar/embed?... URL.
 // Do not paste iframe HTML, a secret iCal URL, credentials or an API key.
 window.coachCalendar = {
-  calendarId: "",
+  calendarId: "https://calendar.google.com/calendar/u/0?cid=ZGVlYzY5YTFhZGI3NWMxMjMyMTNjMGY4ZWI5N2Q2YTQ2ZDllNTk4MTM1MWY3NjNhNTA3MDE2ZjI3MDI3ZmNmOUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t",
   embedUrl: "",
   timeZone: "Africa/Casablanca"
 };
