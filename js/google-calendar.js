@@ -4,10 +4,20 @@
     if (!id && config.embedUrl) {
       const supplied = new URL(config.embedUrl);
       if (supplied.protocol !== "https:" || supplied.hostname !== "calendar.google.com" ||
-          supplied.pathname !== "/calendar/embed" || supplied.username || supplied.password || supplied.port) {
+          supplied.username || supplied.password || supplied.port) {
         throw new Error("Use the Google Calendar embed URL or calendar ID.");
       }
-      id = supplied.searchParams.get("src") || "";
+      if (supplied.pathname === "/calendar/embed") {
+        id = supplied.searchParams.get("src") || "";
+      } else if (/^\/calendar(?:\/u\/\d+)?\/?$/.test(supplied.pathname)) {
+        // Google sharing links encode the calendar ID in cid (Base64/Base64url).
+        const encoded = supplied.searchParams.get("cid") || "";
+        if (!/^[A-Za-z0-9+/_-]+={0,2}$/.test(encoded)) throw new Error("Invalid calendar sharing link.");
+        id = atob(encoded.replace(/-/g, "+").replace(/_/g, "/"));
+      } else {
+        throw new Error("Use the Google Calendar embed URL, sharing link or calendar ID.");
+      }
+      if (!id) throw new Error("The calendar link is missing its calendar ID.");
     }
     if (!id) return null;
     if (!/^[^\s<>@]+@[^\s<>@]+$/.test(id)) throw new Error("Invalid calendar ID.");

@@ -6,7 +6,7 @@ The `QA` branch was created from `main`. The homepage training calendar now uses
 
 1. In Google Calendar on a computer, create a **separate training calendar** containing only information intended for website visitors. Do not publish a personal calendar or private attendee details.
 2. Open Settings → Settings for my calendars → select that training calendar → Access permissions for events. For anonymous website visitors, enable public access with the appropriate event visibility. This exposes those events publicly; make this choice deliberately. Workspace administrators may restrict public sharing.
-3. Under Integrate calendar, copy **Calendar ID**. Set `calendarId` in `js/calendar-config.js` to that value. Alternatively set `embedUrl` to the HTTPS `src` URL inside Google's embed code; do not paste the whole iframe. If both are provided, `calendarId` wins.
+3. Under Integrate calendar, copy **Calendar ID**. Set `calendarId` in `js/calendar-config.js` to that value. Alternatively set `embedUrl` to the HTTPS `src` URL inside Google's embed code, or a Google sharing link such as `https://calendar.google.com/calendar/u/0?cid=...`. Sharing links are decoded and converted into an embed URL automatically; do not paste the whole iframe. If both are provided, `calendarId` wins.
 4. Keep `timeZone: "Africa/Casablanca"` for Morocco, or use the calendar's intended IANA timezone. This respects Morocco's timezone changes rather than hard-coding UTC+1.
 5. Deploy the QA branch and test while signed out of Google. The site cannot verify cross-origin calendar permissions: an inaccessible calendar may show a Google permission message. The external link remains available if an iframe is blocked.
 
