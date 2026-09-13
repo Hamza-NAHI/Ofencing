@@ -266,3 +266,11 @@ html[dir="rtl"] blockquote{padding-left:0;padding-inline-start:24px;border-left:
 
 /* Keep Omar and his fencing mask in frame on desktop and mobile. */
 .coach-photo img,.profile-image img{display:block;width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;object-position:30% center}
+
+/* Google owns the embedded schedule; contain its minimum width on phones. */
+.calendar-wrap > *{min-width:0}
+.calendar-empty{padding:32px;margin:0;line-height:1.6}
+.google-calendar-viewport{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.google-calendar-viewport iframe{display:block;width:100%;min-width:500px;height:600px;border:0;background:white}
+.google-calendar-actions{padding:20px;overflow-wrap:anywhere}
+.google-calendar-actions p{font-size:14px;margin:16px 0 0;color:var(--muted)}

@@ -8,7 +8,9 @@ A responsive static website for Moroccan épée fencer and coach Omar Nahi.
 - `events.html` — upcoming events list
 - `contact.html` — static inquiry form / contact information
 - `styles2.css` — all visual styles
-- `js/data.js` — event and training data
+- `js/data.js` — existing demo event cards
+- `js/calendar-config.js` — public Google Calendar ID / embed URL and timezone
+- `js/google-calendar.js` — shared training calendar integration
 - `js/app.js` — rendering + mobile navigation
 - `assets/` — logo and illustration placeholders
 
@@ -30,7 +32,7 @@ python -m http.server 8000
 Then visit `http://localhost:8000`.
 
 ## Where to edit content now
-Events and training calendar are stored in `js/data.js`.
+Event cards are stored in `js/data.js`. The training calendar is managed directly in Google Calendar. Connect the public calendar once in `js/calendar-config.js`; see [Google Calendar setup](docs/google-calendar.md). No calendar ID has been supplied yet, so the schedule displays an availability message until configured.
 
 Coach biography and general website copy are currently inside the HTML pages.
 
@@ -88,7 +90,9 @@ Every page has a Français / English / العربية selector. French is the de
 
 Translations for page text, metadata, accessible labels, form placeholders, events and training labels live in `js/translations.js`. The English text in the HTML and `js/data.js` is the translation key: update the matching French and Arabic entries when changing English copy. Brand names, contact addresses, dates and source links retain their identity. User-entered form values are never translated or cleared. With JavaScript disabled, the existing English HTML remains readable and the inactive selector stays hidden.
 
-`js/i18n.js` applies translations in place and emits `languagechange` so `js/app.js` can render the events and calendar in the selected language. The selector does not activate the existing demo contact form.
+`js/i18n.js` applies translations in place and emits `languagechange`; `js/app.js` updates event cards and `js/google-calendar.js` updates the shared calendar interface. The selector does not activate the existing demo contact form.
+
+Calendar checks: `node tests/google-calendar.cjs`.
 
 ## HTTPS and search metadata
 
