@@ -35,12 +35,5 @@ window.siteData = {
       location: "Rabat",
       type: "Youth session"
     }
-  ],
-  training: [
-    { day: "Mon", time: "18:00 — 20:00", type: "Private lessons" },
-    { day: "Tue", time: "19:00 — 21:00", type: "Small group" },
-    { day: "Wed", time: "17:00 — 20:00", type: "Youth + private" },
-    { day: "Fri", time: "18:00 — 21:00", type: "Private + competition" },
-    { day: "Sat", time: "09:00 — 13:00", type: "Workshops / sparring" }
   ]
 };

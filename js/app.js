@@ -47,16 +47,6 @@ function renderSiteData() {
     `).join("");
   }
 
-  const calendar = document.getElementById("training-calendar");
-  if (calendar) {
-    calendar.innerHTML = window.siteData.training.map(slot => `
-      <div class="calendar-row">
-        <span class="day">${t(slot.day)}</span>
-        <span class="slot" dir="ltr">${t(slot.time)}</span>
-        <span class="type">${t(slot.type)}</span>
-      </div>
-    `).join("");
-  }
 }
 
 renderSiteData();

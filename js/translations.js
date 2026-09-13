@@ -1,6 +1,11 @@
 // English source strings are stable translation keys. Keep French and Arabic entries in sync.
 window.siteTranslations = {
   "fr": {
+    "View training sessions in the coach’s shared Google Calendar. Omar manages the schedule directly in Google Calendar.": "Consultez les séances dans l’agenda Google partagé du coach. Omar gère le planning directement dans Google Agenda.",
+    "The coach’s shared calendar will be available soon. Contact Omar for current availability.": "L’agenda partagé du coach sera bientôt disponible. Contactez Omar pour connaître ses disponibilités.",
+    "Omar Nahi’s Google Calendar": "Agenda Google d’Omar Nahi",
+    "Open Google Calendar (new tab)": "Ouvrir Google Agenda (nouvel onglet)",
+    "Calendar not showing? Open it in Google Calendar. Use its Add to Google Calendar option to follow the schedule.": "L’agenda ne s’affiche pas ? Ouvrez-le dans Google Agenda. Utilisez l’option Ajouter à Google Agenda pour suivre le planning.",
     "Menu": "Menu",
     "Home": "Accueil",
     "The coach": "Le coach",
@@ -168,6 +173,11 @@ window.siteTranslations = {
     "Instagram coming soon": "Compte Instagram à venir"
   },
   "ar": {
+    "View training sessions in the coach’s shared Google Calendar. Omar manages the schedule directly in Google Calendar.": "اطّلع على حصص التدريب في تقويم Google المشترك للمدرّب. يدير عمر الجدول مباشرة في تقويم Google.",
+    "The coach’s shared calendar will be available soon. Contact Omar for current availability.": "سيكون تقويم المدرّب المشترك متاحاً قريباً. تواصل مع عمر لمعرفة المواعيد المتاحة.",
+    "Omar Nahi’s Google Calendar": "تقويم Google لعمر ناهي",
+    "Open Google Calendar (new tab)": "فتح تقويم Google (علامة تبويب جديدة)",
+    "Calendar not showing? Open it in Google Calendar. Use its Add to Google Calendar option to follow the schedule.": "لا يظهر التقويم؟ افتحه في تقويم Google واستخدم خيار الإضافة إلى تقويم Google لمتابعة الجدول.",
     "Menu": "القائمة",
     "Home": "الرئيسية",
     "The coach": "المدرّب",
