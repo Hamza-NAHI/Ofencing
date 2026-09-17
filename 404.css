@@ -1,0 +1,16 @@
+.error-page{min-height:100vh;min-height:100svh;display:flex;flex-direction:column}
+.error-header{display:flex;align-items:center;justify-content:space-between;gap:20px;padding-block:24px;border-bottom:1px solid var(--line)}
+.error-content{flex:1;text-align:center;padding-block:55px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.error-content .eyebrow{margin-bottom:15px}
+.error-score{font-family:var(--serif);font-size:clamp(110px,24vw,220px);line-height:1;letter-spacing:-.06em;color:var(--red-deep);margin-bottom:16px}
+.error-score span{color:var(--red);display:inline-block;border-bottom:2px solid var(--red-deep)}
+.error-content h1{font-size:clamp(40px,7vw,72px);margin-bottom:22px}
+.error-message{max-width:490px;color:var(--muted);font-size:17px;line-height:1.7;margin-bottom:30px}
+.error-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:14px}
+.error-actions .button{gap:18px}
+.error-actions a:focus-visible,.error-header a:focus-visible{outline:3px solid var(--red);outline-offset:5px}
+.error-hint{font-size:13px;color:var(--muted);margin:24px 0 0}
+.error-footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;padding-block:22px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
+html[dir="rtl"] .error-score{font-family:Georgia,serif}
+@media(max-width:480px){.error-header{gap:12px}.error-header .brand{flex-direction:column;align-items:flex-start;gap:4px;font-size:11px}.error-header .brand-logo{width:100px;height:30px}.error-content{padding-block:36px}.error-message{font-size:15px}.error-actions{width:100%;flex-direction:column}.error-actions .button{justify-content:center}.error-footer{font-size:11px}}
+@media(prefers-reduced-motion:reduce){.error-page a{transition:none}.error-page a:hover{transform:none}}

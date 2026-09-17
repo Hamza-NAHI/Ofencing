@@ -72,7 +72,6 @@ window.siteTranslations = {
     "Message": "Message",
     "City, availability, goals...": "Ville, disponibilités, objectifs…",
     "Send inquiry": "Envoyer la demande",
-    "This static demo does not send the form yet. Connect it to Formspree, Netlify Forms or a backend later.": "Cette démonstration statique n’envoie pas encore le formulaire. Connectez-le ultérieurement à Formspree, Netlify Forms ou à un service serveur.",
     "Upcoming dates": "Prochains rendez-vous",
     "Where we fence next.": "Nos prochains rendez-vous sur la piste.",
     "Competitions, training camps, workshops and open sessions — all in one place.": "Compétitions, stages, ateliers et séances libres : tout au même endroit.",
@@ -165,7 +164,19 @@ window.siteTranslations = {
     "Contact Omar Nahi about fencing sessions in Morocco. Share your level, city and goals to discuss private lessons, club training or competition preparation.": "Contactez Omar Nahi pour vos séances d’escrime au Maroc. Précisez votre niveau, votre ville et vos objectifs : cours, club ou préparation aux compétitions.",
     "Maître Omar Nahi holding a fencing mask": "Maître Omar Nahi tenant un masque d’escrime",
     "Email coming soon": "Adresse e-mail à venir",
-    "Instagram coming soon": "Compte Instagram à venir"
+    "Instagram coming soon": "Compte Instagram à venir",
+    "Loading events…": "Chargement des événements…",
+    "Events are temporarily unavailable. Please try again later.": "Les événements sont temporairement indisponibles. Réessayez plus tard.",
+    "No upcoming events. Please check back soon.": "Aucun événement à venir pour le moment. Revenez bientôt.",
+    "Loading training times…": "Chargement des horaires…",
+    "Training times are temporarily unavailable. Please try again later.": "Les horaires sont temporairement indisponibles. Réessayez plus tard.",
+    "No training slots are currently available. Contact Omar for details.": "Aucun créneau disponible pour le moment. Contactez Omar pour en savoir plus.",
+    "Sending…": "Envoi en cours…",
+    "Your message has been received. Thank you!": "Votre message a bien été reçu. Merci !",
+    "Message not sent. Check your name, email or phone, and field lengths.": "Message non envoyé. Vérifiez votre nom, votre e-mail ou téléphone et la longueur des champs.",
+    "Message not sent. Too many attempts; please try again in a few minutes.": "Message non envoyé. Trop de tentatives ; réessayez dans quelques minutes.",
+    "We could not confirm that your message was sent. Please try again later.": "L’envoi de votre message n’a pas pu être confirmé. Réessayez plus tard.",
+    "Please enable JavaScript to send this form.": "Activez JavaScript pour envoyer ce formulaire."
   },
   "ar": {
     "Menu": "القائمة",
@@ -239,7 +250,6 @@ window.siteTranslations = {
     "Message": "الرسالة",
     "City, availability, goals...": "المدينة، الأوقات المتاحة، الأهداف…",
     "Send inquiry": "إرسال الاستفسار",
-    "This static demo does not send the form yet. Connect it to Formspree, Netlify Forms or a backend later.": "هذه النسخة التجريبية الثابتة لا ترسل النموذج بعد. يمكن ربطه لاحقاً بـ Formspree أو Netlify Forms أو خدمة على الخادم.",
     "Upcoming dates": "المواعيد القادمة",
     "Where we fence next.": "مواعيدنا القادمة على حلبة المبارزة.",
     "Competitions, training camps, workshops and open sessions — all in one place.": "منافسات ومعسكرات تدريب وورش وحصص مفتوحة، كلها في مكان واحد.",
@@ -332,6 +342,18 @@ window.siteTranslations = {
     "Contact Omar Nahi about fencing sessions in Morocco. Share your level, city and goals to discuss private lessons, club training or competition preparation.": "تواصل مع عمر ناهي بشأن حصص المبارزة في المغرب. شارك مستواك ومدينتك وأهدافك لمناقشة دروس فردية أو تدريب في الأندية أو الاستعداد للمنافسات.",
     "Maître Omar Nahi holding a fencing mask": "الأستاذ عمر ناهي يحمل قناع مبارزة",
     "Email coming soon": "البريد الإلكتروني قريباً",
-    "Instagram coming soon": "حساب إنستغرام قريباً"
+    "Instagram coming soon": "حساب إنستغرام قريباً",
+    "Loading events…": "جارٍ تحميل الفعاليات…",
+    "Events are temporarily unavailable. Please try again later.": "الفعاليات غير متاحة مؤقتاً. يرجى المحاولة لاحقاً.",
+    "No upcoming events. Please check back soon.": "لا توجد فعاليات قادمة حالياً. عد قريباً.",
+    "Loading training times…": "جارٍ تحميل مواعيد التدريب…",
+    "Training times are temporarily unavailable. Please try again later.": "مواعيد التدريب غير متاحة مؤقتاً. يرجى المحاولة لاحقاً.",
+    "No training slots are currently available. Contact Omar for details.": "لا توجد حصص تدريب متاحة حالياً. تواصل مع عمر للمزيد من المعلومات.",
+    "Sending…": "جارٍ الإرسال…",
+    "Your message has been received. Thank you!": "تم استلام رسالتك. شكراً لك!",
+    "Message not sent. Check your name, email or phone, and field lengths.": "لم تُرسل الرسالة. تحقق من اسمك وبريدك الإلكتروني أو رقم هاتفك وطول الحقول.",
+    "Message not sent. Too many attempts; please try again in a few minutes.": "لم تُرسل الرسالة. محاولات كثيرة؛ يرجى المحاولة بعد بضع دقائق.",
+    "We could not confirm that your message was sent. Please try again later.": "تعذّر تأكيد إرسال رسالتك. يرجى المحاولة لاحقاً.",
+    "Please enable JavaScript to send this form.": "يرجى تفعيل JavaScript لإرسال هذا النموذج."
   }
 };

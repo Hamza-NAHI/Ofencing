@@ -1,7 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -252 720 720" fill="#191e22" role="img" aria-labelledby="on-title on-desc">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 216" fill="#191e22" role="img" aria-labelledby="on-title on-desc">
   <title id="on-title">ON — Épée fencing</title>
   <desc id="on-desc">ON pierced through its centre by a sporting épée with French grip, deep bell guard and rounded electric tip. Transparent background.</desc>
-  <rect x="0" y="-252" width="720" height="720" rx="100" fill="#fbfaf4"/>
   <defs>
     <!-- Transparent clearance, not white paint. -->
     <clipPath id="on-blade-clearance">

@@ -1,0 +1,8 @@
+DirectoryIndex index.php
+<FilesMatch "^_">
+    Require all denied
+</FilesMatch>
+<IfModule mod_headers.c>
+    Header always set X-Robots-Tag "noindex, nofollow"
+    Header always set Cache-Control "no-store"
+</IfModule>
