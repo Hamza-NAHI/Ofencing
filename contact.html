@@ -72,14 +72,14 @@
         <p class="small-note">Replace these placeholder details with the coach's real contact information.</p>
       </div>
 
-      <form class="contact-form" onsubmit="event.preventDefault(); document.getElementById('form-note').hidden=false;">
+      <form class="contact-form" action="api/messages.php" method="post">
         <label>
           Your name
-          <input type="text" name="name" dir="auto" placeholder="Name" required>
+          <input type="text" name="name" maxlength="120" autocomplete="name" dir="auto" placeholder="Name" required>
         </label>
         <label>
           Email or phone
-          <input type="text" name="contact" dir="auto" placeholder="How should we reach you?" required>
+          <input type="text" name="contact" maxlength="254" dir="auto" placeholder="How should we reach you?" required>
         </label>
         <label>
           Your fencing level
@@ -93,10 +93,11 @@
         </label>
         <label>
           Message
-          <textarea name="message" dir="auto" rows="5" placeholder="City, availability, goals..."></textarea>
+          <textarea name="message" maxlength="5000" dir="auto" rows="5" placeholder="City, availability, goals..."></textarea>
         </label>
-        <button class="button button-dark" type="submit">Send inquiry</button>
-        <p id="form-note" class="form-note" hidden>This static demo does not send the form yet. Connect it to Formspree, Netlify Forms or a backend later.</p>
+        <button class="button button-dark" type="submit" disabled>Send inquiry</button>
+        <p id="form-note" class="form-note" role="status" aria-live="polite" data-no-translate hidden></p>
+        <noscript><p class="form-note">Please enable JavaScript to send this form.</p></noscript>
       </form>
     </section>
   </main>
@@ -108,6 +109,8 @@
   </footer>
   <script src="js/translations.js"></script>
   <script src="js/i18n.js"></script>
+  <script src="js/api.js"></script>
   <script src="js/app.js"></script>
+  <script src="js/contact.js"></script>
 </body>
 </html>

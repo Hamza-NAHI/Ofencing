@@ -269,3 +269,9 @@ html[dir="rtl"] blockquote{padding-left:0;padding-inline-start:24px;border-left:
 
 /* Keep Omar and his fencing mask in frame on desktop and mobile. */
 .coach-photo img,.profile-image img{display:block;width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;object-position:30% center}
+
+/* Admin-entered text can contain long words; keep the existing grids responsive. */
+.event-card,.event-row>div,.calendar-row>span{min-width:0}
+.event-card h3,.event-card p,.event-meta span,.event-row h2,.event-row p,.event-side span,.calendar-row .type{overflow-wrap:anywhere}
+.calendar-table>p[role="status"]{padding:18px 22px;margin:0}
+.contact-form button:disabled{opacity:.65;cursor:wait}
