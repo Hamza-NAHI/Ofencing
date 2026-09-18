@@ -5,6 +5,8 @@ $stats = [
     ['Tous les événements', query('SELECT COUNT(*) FROM events')->fetchColumn(), 'admin/events/'],
     ['Événements publiés à venir', query('SELECT COUNT(*) FROM events WHERE is_published = 1 AND event_date >= ?', [date('Y-m-d')])->fetchColumn(), 'admin/events/'],
     ['Créneaux actifs', query('SELECT COUNT(*) FROM training WHERE is_active = 1')->fetchColumn(), 'admin/training/'],
+    ['Albums de la galerie', query('SELECT COUNT(*) FROM gallery_albums')->fetchColumn(), 'admin/gallery/'],
+    ['Photos', query('SELECT COUNT(*) FROM gallery_photos')->fetchColumn(), 'admin/gallery/'],
     ['Messages non lus', query('SELECT COUNT(*) FROM contact_messages WHERE is_read = 0')->fetchColumn(), 'admin/messages/?filter=unread'],
 ];
 admin_header('Tableau de bord');

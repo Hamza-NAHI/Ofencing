@@ -1,3 +1,5 @@
 /config/local.php
 *.log
 /tests/.artifacts/
+/uploads/gallery/*
+!/uploads/gallery/.gitkeep

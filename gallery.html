@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Explore fencing events, workshops, training camps and open sessions in Morocco. Find upcoming dates and discuss competition preparation with Omar Nahi." />
-  <title>Fencing Events &amp; Training in Morocco | ONescrime</title>
+  <meta name="description" content="Explore ONescrime photo albums: fencing competitions, training camps, workshops and moments with coach Omar Nahi in Morocco." />
+  <title>Fencing Photo Gallery | Omar Nahi – ONescrime</title>
   <meta name="robots" content="index, follow, max-image-preview:large" />
-  <link rel="canonical" href="https://ofencing.vercel.app/events.html" />
+  <link rel="canonical" href="https://ofencing.vercel.app/gallery.html" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="ONescrime" />
-  <meta property="og:title" content="Fencing Events &amp; Training in Morocco | ONescrime" data-seo-translatable />
-  <meta property="og:description" content="Explore fencing events, workshops, training camps and open sessions in Morocco. Find upcoming dates and discuss competition preparation with Omar Nahi." data-seo-translatable />
-  <meta property="og:url" content="https://ofencing.vercel.app/events.html" />
+  <meta property="og:title" content="Fencing Photo Gallery | Omar Nahi – ONescrime" data-seo-translatable />
+  <meta property="og:description" content="Explore ONescrime photo albums: fencing competitions, training camps, workshops and moments with coach Omar Nahi in Morocco." data-seo-translatable />
+  <meta property="og:url" content="https://ofencing.vercel.app/gallery.html" />
   <meta property="og:locale" content="en_US" />
   <meta property="og:image" content="https://ofencing.vercel.app/og.png" />
   <meta property="og:image:secure_url" content="https://ofencing.vercel.app/og.png" />
@@ -22,12 +22,13 @@
   <meta name="twitter:image" content="https://ofencing.vercel.app/og.png" />
   <meta name="twitter:image:alt" content="Maître Omar Nahi holding a fencing mask" data-seo-translatable />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Fencing Events &amp; Training in Morocco | ONescrime" data-seo-translatable />
-  <meta name="twitter:description" content="Explore fencing events, workshops, training camps and open sessions in Morocco. Find upcoming dates and discuss competition preparation with Omar Nahi." data-seo-translatable />
+  <meta name="twitter:title" content="Fencing Photo Gallery | Omar Nahi – ONescrime" data-seo-translatable />
+  <meta name="twitter:description" content="Explore ONescrime photo albums: fencing competitions, training camps, workshops and moments with coach Omar Nahi in Morocco." data-seo-translatable />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles2.css" />
+  <link rel="stylesheet" href="gallery.css" />
   <link rel="icon" href="assets/favicon.svg?v=on-epee2" type="image/svg+xml">
 </head>
 <body>
@@ -37,8 +38,8 @@
     <nav id="main-nav" class="main-nav">
       <a href="index.html">Home</a>
       <a href="coach.html">The coach</a>
-      <a class="active" href="events.html">Events</a>
-      <a href="gallery.html">Gallery</a>
+      <a href="events.html">Events</a>
+      <a class="active" href="gallery.html">Gallery</a>
       <a href="index.html#calendar">Training</a>
       <a class="nav-cta" href="contact.html">Book a session</a>
     </nav>
@@ -53,27 +54,28 @@
   </header>
 
   <main>
-    <section class="inner-hero shell events-hero">
-      <p class="eyebrow">Upcoming dates</p>
-      <h1>Where we fence next.</h1>
-      <p class="inner-lede">
-        Competitions, training camps, workshops and open sessions — all in one place.
-      </p>
+    <section class="inner-hero shell">
+      <p class="eyebrow">Gallery</p>
+      <h1>Moments on the piste.</h1>
+      <p class="inner-lede">Competitions, training and shared moments — discover our photo albums.</p>
     </section>
-
-    <section class="section-pad shell">
-      <div class="events-list" id="all-events"></div>
-    </section>
-
-    <section class="soft-section section-pad">
-      <div class="shell event-note">
-        <p class="eyebrow">Competing soon?</p>
-        <h2>Event preparation can be added to your training plan.</h2>
-        <p>We can work on tactical preparation, bout structure, warm-up routines and post-competition review.</p>
-        <a class="button button-dark" href="contact.html">Plan competition prep</a>
-      </div>
+    <section class="shell gallery-section" aria-label="Gallery">
+      <div id="gallery-content" aria-busy="true"><p role="status">Loading gallery…</p></div>
+      <noscript><p>Please enable JavaScript to view the gallery.</p></noscript>
     </section>
   </main>
+  <dialog id="gallery-viewer" class="gallery-viewer" aria-labelledby="viewer-title">
+    <h2 id="viewer-title" class="sr-only">Photo viewer</h2>
+    <button id="viewer-close" class="viewer-close" type="button" aria-label="Close viewer" autofocus>×</button>
+    <button id="viewer-previous" class="viewer-previous" type="button" aria-label="Previous photo">←</button>
+    <figure class="viewer-figure">
+      <img id="viewer-image" alt="" decoding="async">
+      <p id="viewer-image-error" role="status" hidden>Image unavailable</p>
+      <figcaption id="viewer-caption" dir="auto"></figcaption>
+      <p id="viewer-count" aria-live="polite"></p>
+    </figure>
+    <button id="viewer-next" class="viewer-next" type="button" aria-label="Next photo">→</button>
+  </dialog>
 
   <footer class="site-footer shell">
     <div><a class="brand" href="index.html"><img class="brand-logo" src="assets/on-fencing-logo.svg" alt="" width="120" height="36"><span>ONescrime</span></a><p>Fencing coaching in Morocco.</p></div>
@@ -85,5 +87,6 @@
   <script src="js/translations.js"></script>
   <script src="js/i18n.js"></script>
   <script src="js/app.js"></script>
+  <script src="js/gallery.js"></script>
 </body>
 </html>

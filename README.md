@@ -1,12 +1,13 @@
 # ONescrime — fencing coach website
 
-A responsive website for Moroccan épée fencer and coach Omar Nahi. The public pages use HTML/CSS/vanilla JavaScript; PHP/PDO and MySQL power events, training and contact messages on the same shared host.
+A responsive website for Moroccan épée fencer and coach Omar Nahi. The public pages use HTML/CSS/vanilla JavaScript; PHP/PDO and MySQL power events, training, photo albums and contact messages on the same shared host.
 
 ## Pages
 - `index.html` — welcoming homepage, fencing introduction, coach preview, upcoming events, weekly training calendar
 - `coach.html` — coach biography, selected competition results and training goals
 - `events.html` — upcoming events list
 - `contact.html` — API-backed inquiry form / contact information
+- `gallery.html`, `gallery.css`, `js/gallery.js` — album gallery, responsive thumbnails and accessible photo viewer
 - `styles2.css` — all visual styles
 - `js/api.js` — shared, subdirectory-aware API client
 - `js/contact.js` — real contact form submission
@@ -29,6 +30,7 @@ Use XAMPP (Apache + MySQL) and follow **PHP / MySQL deployment** below. Opening 
 ## Where to edit content now
 
 - Events and weekly training: `/admin/`, stored only in MySQL. `js/data.js` has been removed.
+- Photo albums: `/admin/gallery/`; metadata in MySQL, optimized images and thumbnails in `uploads/gallery/`.
 - Contact inquiries: submitted to MySQL and visible only in `/admin/messages/`.
 - Coach biography and general website copy: the existing HTML pages and translation dictionaries.
 - No CMS, translation editor, Google Calendar synchronization or JavaScript backend is required.
@@ -51,17 +53,17 @@ Translations for page text, metadata, accessible labels, form placeholders and A
 
 ## HTTPS and search metadata
 
-Production origin: `https://ofencing.vercel.app`. Update the absolute URLs in the four HTML canonical/Open Graph tags, `robots.txt` and `sitemap.xml` together if the production domain changes.
+Production origin: `https://ofencing.vercel.app`. Update the absolute URLs in the five HTML canonical/Open Graph tags, `robots.txt` and `sitemap.xml` together if the production domain changes.
 
 Vercel handles HTTP → HTTPS with a permanent 308 redirect at its edge (verified on the existing public origin). `vercel.json` adds one-year HSTS and `Content-Security-Policy: upgrade-insecure-requests`. It also redirects `/index.html` to `/` and the common typo `/robot.txt` to `/robots.txt`. These rules require a Vercel deployment; another host needs equivalent server configuration and a TLS certificate. No JavaScript-only HTTPS redirect is used, so local HTTP development remains available.
 
-Each page has its own title and description, an HTTPS canonical URL, a robots meta tag and Open Graph/X text metadata. `js/i18n.js` translates the title, description and social text and updates the Open Graph locale when switching languages. Static HTML metadata is English; French is still the default for visitors with JavaScript. Crawlers that do not execute JavaScript receive the English metadata. Language query variants share the page’s canonical URL; the sitemap lists the four main pages, not separate server-rendered language versions. No unsupported `hreflang` claims are made.
+Each page has its own title and description, an HTTPS canonical URL, a robots meta tag and Open Graph/X text metadata. `js/i18n.js` translates the title, description and social text and updates the Open Graph locale when switching languages. Static HTML metadata is English; French is still the default for visitors with JavaScript. Crawlers that do not execute JavaScript receive the English metadata. Language query variants share the page’s canonical URL; the sitemap lists the five main pages, not separate server-rendered language versions. No unsupported `hreflang` claims are made.
 
 `robots.txt` allows crawling and declares `sitemap.xml`. Neither a sitemap nor a robots directive guarantees indexing. The changes in `dev` take effect on the public website only when that revision is deployed. HSTS does not request subdomain inclusion or preload.
 
 ## Social preview image
 
-`og.png` is the 1734 × 907 social-sharing card based on the approved coach portrait, with the requested text “Maître Omar Nahi”. All four pages reference its absolute HTTPS URL in Open Graph and Twitter metadata, including dimensions, MIME type and translated alternative text. Twitter uses `summary_large_image`. The card is served as a static file without requiring JavaScript. The preview card retains the requested “Maître Omar Nahi” caption; the site brand and page metadata use ONescrime.
+`og.png` is the 1734 × 907 social-sharing card based on the approved coach portrait, with the requested text “Maître Omar Nahi”. All five pages reference its absolute HTTPS URL in Open Graph and Twitter metadata, including dimensions, MIME type and translated alternative text. Twitter uses `summary_large_image`. The card is served as a static file without requiring JavaScript. The preview card retains the requested “Maître Omar Nahi” caption; the site brand and page metadata use ONescrime.
 
 Deploy this revision before checking public link previews. Sharing services may retain an older cached preview until they fetch the page again. If the production domain changes, update the image URLs along with the canonical URLs.
 
@@ -75,7 +77,7 @@ The previous demo email address and Instagram handle have been replaced with tra
 
 ### 1. Requirements
 
-- PHP **8.0+**, PDO and the `pdo_mysql` extension; use a maintained PHP 8 release on production hosting.
+- PHP **8.0+**, PDO, `pdo_mysql`, GD and Fileinfo; EXIF is recommended for phone/camera orientation. Gallery details below; use a maintained PHP 8 release on production hosting.
 - MySQL **8+** or MariaDB **10.4+** (including XAMPP). `utf8mb4` supports French and Arabic.
 - Apache 2.4 with `.htaccess` support (`AllowOverride All`), `mod_rewrite` and preferably `mod_headers`.
 - PHP sessions and a writable system temporary directory (used for small locked rate-limit files outside the website).
@@ -87,7 +89,7 @@ The previous demo email address and Instagram handle have been replaced with tra
 2. Extract/copy the **contents** of the project into `C:\xampp\htdocs\ofencing\`. You should have `C:\xampp\htdocs\ofencing\index.html`, not an extra nested repository folder. Include the `.htaccess` files.
 3. Open XAMPP Control Panel and start **Apache** and **MySQL**. If either cannot start, resolve the port conflict shown by XAMPP before testing the website.
 4. Open `http://localhost/phpmyadmin/`. Create a database named **`ofencing`**, using `utf8mb4_unicode_ci`.
-5. Select that database → **Import** → choose `C:\xampp\htdocs\ofencing\database\schema.sql` → **Go**. Import into an empty database **once**. It creates four tables and development examples; it is not an upgrade/reset script. Re-importing intentionally fails rather than overwriting existing data.
+5. Select that database → **Import** → choose `C:\xampp\htdocs\ofencing\database\schema.sql` → **Go**. Import into an empty database **once**. It creates six tables and development examples; it is not an upgrade/reset script. Re-importing intentionally fails rather than overwriting existing data.
 6. Copy `config/local.example.php` to **`config/local.php`**. Edit it to contain the following local values:
 
    ```php
@@ -134,6 +136,8 @@ On public hosting, do setup only over HTTPS. The setup secret is sent by POST, n
 | Homepage / training | `http://localhost/ofencing/` |
 | Events | `http://localhost/ofencing/events.html` |
 | Contact | `http://localhost/ofencing/contact.html` |
+| Gallery | `http://localhost/ofencing/gallery.html` |
+| Gallery Admin | `http://localhost/ofencing/admin/gallery/` |
 | Admin login / dashboard | `http://localhost/ofencing/admin/` |
 | Events Admin | `http://localhost/ofencing/admin/events/` |
 | Training Admin | `http://localhost/ofencing/admin/training/` |
@@ -171,8 +175,8 @@ On public hosting, do setup only over HTTPS. The setup secret is sent by POST, n
 ### 5. Shared hosting / cPanel deployment
 
 1. Enable PHP with PDO MySQL, create a MySQL database and a dedicated database user in the hosting panel, and associate that user with the database. Hosts often prefix the database/user names with your account name.
-2. Import `database/schema.sql` once through the host's phpMyAdmin. Take a database backup before any later manual migrations.
-3. Upload the public pages/assets, JavaScript, CSS, `404.php`, `api/`, `admin/`, `config/` and all relevant `.htaccess` files into `public_html/` (or your chosen subfolder). Do **not** upload `.git`, tests, SQL exports or local test artifacts. The SQL file is only needed for import, not to serve the website.
+2. For a new, empty database, import `database/schema.sql` once through the host's phpMyAdmin. For an existing installation from the previous backend commit, back it up and import only `database/gallery.sql` once; do not re-import the full schema.
+3. Upload the public pages/assets, JavaScript, CSS, `404.php`, `api/`, `admin/`, `config/`, `uploads/.htaccess`, an empty `uploads/gallery/` for a new installation, and all other relevant `.htaccess` files into `public_html/` (or your chosen subfolder). Do **not** upload `.git`, tests, SQL exports or local test artifacts. The SQL file is only needed for import, not to serve the website.
 4. Create `config/local.php` using the actual database hostname, port, database, user and password from your host. Do not upload local XAMPP credentials. The production web account needs SELECT/INSERT/UPDATE/DELETE on this database; schema import may use a separate account.
 5. Enable the TLS certificate and **HTTPS redirect in the hosting panel**. Only then use the setup page and Admin. The application automatically marks session cookies Secure when PHP receives HTTPS. With a reverse proxy, configure the host to report HTTPS correctly; do not trust arbitrary client forwarding headers.
 6. Run the one-time admin setup, erase its secret, and confirm login at `https://YOUR-DOMAIN/admin/` (include your subfolder if applicable).
@@ -190,6 +194,8 @@ All API responses are JSON with `Content-Type: application/json; charset=utf-8` 
 | --- | --- | --- |
 | `api/events.php` | GET | Published events ordered by `event_date`, then ID; includes server `today` (`YYYY-MM-DD`). |
 | `api/training.php` | GET | Active slots ordered by `display_order`, weekday, start time, ID. |
+| `api/gallery.php` | GET | Published albums with photo counts and cover URLs. |
+| `api/gallery.php?album=ID` | GET | Published album metadata and ordered photos; draft/missing albums return 404. |
 | `api/events.php` | POST | Authenticated create/update/delete with CSRF. |
 | `api/training.php` | POST | Authenticated create/update/delete with CSRF. |
 | `api/messages.php` | POST | Public contact submission. Stores `name`, `contact`, optional `level` and `message`; returns 201. |
@@ -235,4 +241,97 @@ Set `OFENCING_TEST_BASE_URL` (for example `http://localhost/ofencing/`), `OFENCI
 
 The implementation was checked with PHP 8.3, MariaDB 10.11 and Apache 2.4, at both the domain root and `/ofencing/`: public reads, real contact inserts, all Admin/API CRUD operations, publication/activation filtering, sorting, escaped Unicode content, malformed/oversized input, invalid IDs, authentication, CSRF, logout, throttling, safe 503 JSON on database failure, denied private files and the branded nested 404. Windows XAMPP and the final hosting account still require the deployment checks above.
 
-Browser verification also covered real form submission and Admin-created data, FR/EN/AR including RTL, mobile navigation and layouts, long administrator-entered titles, escaped HTML, empty/unavailable states, preserved form input after failures, disabled sending buttons and the 404 adapter. The only public CSS additions keep long dynamic text inside the existing layout and indicate a pending submission.
+Browser verification also covered real form submission and Admin-created data, FR/EN/AR including RTL, mobile navigation and layouts, long administrator-entered titles, escaped HTML, empty/unavailable states, preserved form input after failures, disabled sending buttons and the 404 adapter. Those backend changes retain the existing public design. Gallery-specific styles are isolated in `gallery.css`.
+
+## Gallery
+
+### Install or upgrade the database
+
+- **New installation:** import `database/schema.sql` once into an empty database. It includes `gallery_albums` and `gallery_photos` alongside the four existing tables. No sample photos or default Admin password are inserted.
+- **Existing installation:** back up the database, select it in phpMyAdmin and import **`database/gallery.sql` once** before using the updated Admin dashboard. It only creates the two new tables and their indexes/foreign key; existing accounts, events, training and messages are preserved. Do not import both SQL files or recreate your database. A repeated migration intentionally reports existing tables.
+- `gallery_albums` stores title, description, unique stable slug, optional date/location, publication flag, display order, cover ID and timestamps. `gallery_photos` stores album ID, generated filenames, original basename (metadata only), caption, alt text, encoded sizes/dimensions and display order. The album foreign key cascades photo rows; cover selection is checked against the same album in PHP. Always delete through Admin so the associated files are removed too.
+
+### XAMPP and shared-host configuration
+
+In XAMPP Control Panel → Apache → **Config → PHP (php.ini)**, enable `extension=gd` and `extension=fileinfo`; enable `extension=exif` for automatic JPEG orientation. Enable each extension only once. Some Windows builds require `mbstring` before EXIF: follow the comments in the supplied XAMPP `php.ini`. Restart Apache after changing PHP extensions or limits. PDO MySQL and the original database/session configuration remain required.
+
+To check GD from the XAMPP terminal, run `C:\xampp\php\php.exe -r "var_export(extension_loaded('gd'));"` (`true` means loaded). `C:\xampp\php\php.exe -r "print_r(gd_info());"` lists JPEG/PNG/WebP capabilities. PHP CLI and Apache can use different configuration files, so also open an Admin album → **Limites de ce serveur** to verify the PHP instance actually serving uploads.
+
+Practical settings for typical camera batches:
+
+```ini
+file_uploads = On
+upload_max_filesize = 15M
+post_max_size = 20M
+memory_limit = 512M
+max_execution_time = 60
+max_input_time = 120
+max_file_uploads = 20
+```
+
+The application caps **each source at 15 MiB, 40 megapixels and 12,000 px per side**, even if PHP allows more. It estimates decoded memory before calling GD and rejects an image if the configured memory limit is insufficient. A 256M host accepts many ordinary photos; larger high-resolution photos can require 512M or pre-resizing. Do not raise limits beyond your host's allowance. The Admin album page shows the effective PHP limits and GD/WebP/JPEG/EXIF capabilities. `max_input_time` covers receiving an upload; `max_execution_time` covers each processing request. A hosting proxy may impose additional request limits.
+
+For shared hosting/cPanel, enable **GD, Fileinfo and EXIF** in the PHP extension selector and set permitted limits through the hosting panel (or supported `php.ini`/`.user.ini` mechanism). WebP encoding is detected automatically. If GD cannot encode WebP, the application writes JPEG instead; if no suitable GD encoder exists, it refuses the upload with a clear error. No unprocessed file is retained as a fallback.
+
+Keep `uploads/.htaccess` and create `uploads/gallery/` if your upload tool omits empty folders. The PHP web account needs write/delete access to `uploads/gallery/` and its album directories. On typical Linux hosting, start with directories **0755**, files **0644**, and ownership matching the account running PHP. Have the host correct ownership/group access if necessary; do not use blanket `0777`. XAMPP Windows needs the equivalent write permission for the Apache account. Runtime photos and album access files are ignored by Git. Deployments must **preserve existing `uploads/gallery/` contents**; back up and restore that directory together with the database.
+
+Apache **2.4 must honor the provided `.htaccess` rules**, including authorization, handler and directory-listing directives (`AllowOverride All` is the simplest local setting). A draft album gets a generated `Require all denied` access file; publishing changes it to `Require all granted`. Public photos are static optimized files, not PHP downloads. Authenticated Admin previews use `admin/gallery/image.php` so drafts remain manageable. Do not delete or manually edit generated album `.htaccess` files. PHP's development server, static hosts and Nginx do not enforce these files; use XAMPP/Apache for the complete security behavior. An alternative web server needs equivalent server-side access rules before deployment.
+
+### Admin workflow
+
+1. Sign in at `/admin/` → **Galerie** → **Nouvel album**. Enter title, description, optional date/location and order. New albums start as drafts. Lower display order comes first; ties show the newest album first.
+2. Open the album and select **1–50 JPEG, PNG or WebP photos at once**. Click **Ajouter les photos**. The browser sends one photo per request, shows progress and continues after an individual failure. This permits a 50-photo selection without raising PHP's usual `max_file_uploads=20` or fitting the whole batch inside `post_max_size`.
+3. Keep the page open until it finishes, then click **Actualiser les photos de l’album**. Successful photos are retained; failed files remain selected where the browser supports it. An interrupted/uncertain request asks you to check the album before retrying, because a retry can add a duplicate. No automatic retry occurs.
+4. Save optional captions and accessible descriptions, move photos with **Monter / Descendre**, and choose any photo as the cover. With no chosen cover, the first ordered photo is used. Deleting the chosen cover falls back to the first remaining photo.
+5. Publish through the album form or album list. Unpublishing removes it from the API/public gallery and blocks direct static image requests. Previously downloaded/copied images cannot be recalled.
+6. Photo and album deletion each require a confirmation page and a CSRF-protected POST. Deleting a photo removes both generated files; deleting an album removes all photo rows, files and its empty directory. Files are temporarily moved into a private folder so a database failure can restore them; any incomplete cleanup is logged and shown to the administrator.
+
+Without JavaScript, the multipart upload form still works, but a batch must fit both `max_file_uploads` and the **total** `post_max_size`. Larger selections should use the normal JavaScript upload queue. The public gallery requires JavaScript and shows a readable notice when it is disabled.
+
+### Real image processing and storage
+
+`config/gallery-images.php` validates the PHP upload, actual file size, allowed extension, Fileinfo MIME and image dimensions. The browser-provided MIME type is not trusted. PHP GD decodes and re-encodes the image; files are never accepted by merely changing their extension. Path components/control characters are removed from the original filename, which is kept only as private metadata. Generated disk names use 128 random bits; album folders use stable numeric IDs, so renaming an album does not break URLs.
+
+| Generated file | Longest edge | WebP quality | JPEG fallback quality |
+| --- | --- | --- | --- |
+| Viewer image | At most 1920 px | 82 | 85 |
+| Grid/cover thumbnail | At most 640 px | 76 | 78 |
+
+Aspect ratios are preserved and small photos are never enlarged. JPEG EXIF orientations 1–8 are corrected when EXIF is enabled; re-encoding removes source EXIF/GPS metadata. WebP preserves transparency; JPEG fallback flattens transparent pixels onto white. Source PNGs are encoded to WebP or JPEG, not stored unchanged. HEIC/HEIF, GIF, SVG, AVIF and animated-image workflows are not supported; convert these to a supported static photo first. Lossy encoding and resizing reduce typical large photo sizes, but an already tiny source can produce a slightly larger file.
+
+For each successful upload, only these two files remain:
+
+```text
+uploads/gallery/album-12/9b03f480a1044090ba4fabcc0f21e817.webp
+uploads/gallery/album-12/9b03f480a1044090ba4fabcc0f21e817-thumb.webp
+```
+
+The PHP temporary original is deleted after processing; it is never moved to public storage. DB insertion failures clean up generated images. Only generated `.webp`/`.jpg` filenames are served under `uploads/`; executable and other extensions are denied, script handlers are removed, directory listing is disabled and responses include `nosniff`. Image caching requires revalidation so later unpublishing is honored on subsequent requests when the included headers are active.
+
+### Public gallery and API
+
+`gallery.html` first renders published album covers/counts; `gallery.html?album=12` shows that album's title, description, date, location, count and ordered grid. Grids use lazy-loaded **thumbnails only**. An optimized larger image loads on opening the native-dialog viewer. It supports previous/next, Escape, arrow keys, touch swipes, focus trapping/restoration and labelled buttons. Layouts use four/three/two photo columns for desktop/tablet/mobile. The surrounding site design, logo and FR/EN/AR behavior are retained, including RTL. Administrator-entered album text/captions are not machine-translated. Empty albums, missing images, unavailable API and missing/unpublished albums have readable states.
+
+- `GET api/gallery.php` returns `{ "success": true, "data": [ ...albums ] }`, ordered by display order then newest first. Each album has `id`, `title`, `description`, `slug`, `event_date`, `location`, `photo_count`, and a `cover` photo or `null`.
+- `GET api/gallery.php?album=12` returns `{ "success": true, "data": { "album": {...}, "photos": [...] } }`. A photo contains `id`, `caption`, `alt_text`, `width`, `height`, `thumbnail_url` and `image_url`. No server filesystem paths, original filenames or unpublished records are returned, including to logged-in visitors using this public endpoint. Draft/missing IDs return 404; malformed IDs return 422; non-GET methods return 405.
+- Admin writes remain under authenticated `admin/gallery/*.php`, with prepared SQL and CSRF protection. `upload.php?id=12` accepts multipart `photos[]`; `Accept: application/json` selects the upload queue response. It returns 201 for complete success, 200 for mixed success, or 422 when no photo succeeds, with per-file results. Missing session/CSRF return 401/403 in JSON mode. PHP request-size overflow returns 413 when the request reaches PHP.
+
+### Test locally
+
+After importing the appropriate SQL file and configuring PHP/permissions:
+
+1. Open `http://localhost/ofencing/admin/gallery/`, create a draft, and upload several large camera JPEGs plus PNG/WebP photos in one selection. Include one invalid `.jpg` containing plain text; valid photos must still succeed. Repeat with 50 small valid images.
+2. Confirm two generated files per accepted photo under `C:\xampp\htdocs\ofencing\uploads\gallery\album-ID\`, no camera originals, viewer edge ≤1920 px and thumbnail edge ≤640 px. Test a small photo (no enlargement) and a portrait JPEG with EXIF rotation.
+3. While drafted, `http://localhost/ofencing/api/gallery.php?album=ID` must return 404; a known direct image URL must return 403 through Apache. Publish and open `http://localhost/ofencing/gallery.html`; the album appears and its photos open in the viewer.
+4. Change cover, captions, alt text and order. Check keyboard controls, mobile swipes, Français/English/العربية, responsive layouts, and the absence of raw HTML execution in entered titles.
+5. Delete the chosen cover: both files disappear and cover fallback works. Delete the album: its rows and all files disappear. Verify the original events, training, contact and Admin login/logout flows still work.
+
+`tests/gallery_integration.py` is an optional **development-only** HTTP/disk test using Python and Pillow (`python -m pip install Pillow`). Production requires neither. Use an isolated local database and test administrator, set `OFENCING_TEST_BASE_URL`, `OFENCING_TEST_USERNAME`, `OFENCING_TEST_PASSWORD`, `OFENCING_TEST_ALLOW_WRITES=yes` and `OFENCING_TEST_APACHE=yes`, then run `python tests/gallery_integration.py`. Optionally set `OFENCING_TEST_REPO` to this local checkout to also verify deletion on disk. The script refuses non-local hosts, creates prefixed albums, and cleans up only its own data. Use PHP GD with WebP/EXIF, `upload_max_filesize=15M` or higher, `post_max_size=20M` or higher and `memory_limit=512M` for its 24-megapixel test fixture.
+
+Validation used real PHP 8.3/GD, MariaDB 10.11 and Apache 2.4 at the domain root and `/ofencing/`. It covered actual multipart compression/thumbnail generation, partial failures, draft metadata and static-file privacy, CSRF/authentication, formats/size/pixel guards, metadata/cover/order changes, complete file deletion and existing backend regression tests. Separate checks covered the additive migration, all eight EXIF orientations, actual JPEG fallback, missing GD and a 64M memory limit. A 6000×4000 test JPEG shrank from 12,595,976 bytes to 930,514 bytes including its thumbnail. Windows XAMPP and the final shared-host account still need the local/hosting checks above.
+
+Chromium browser verification against live PHP/MySQL also covered album creation, mixed JPEG/PNG/WebP uploads with partial failure, a single selection of **50 successfully stored photos**, captions/alt text, thumbnails-only initial requests, larger-image loading, keyboard/focus controls, mobile touch swipes, FR/EN/AR and RTL. It checked 320–1440 px layouts, empty/missing/unavailable states, broken images and Gallery links on all five public pages. Test photos and accounts are not part of the repository.
+
+### Limits
+
+There is no pagination, drag-and-drop sorting, client-side image editing, automatic duplicate detection, resumable queue, cloud storage, CDN, video support or background processing. Many large albums can make Admin/public pages heavier despite lazy loading; split collections into manageable albums. Image orientation correction depends on EXIF availability; conversion depends on the installed GD codecs and host CPU/memory/disk quotas. Original camera files must be archived separately if needed later. The deployment remains standard PHP/MySQL/Apache; no Node server, build system or external gallery service is added.

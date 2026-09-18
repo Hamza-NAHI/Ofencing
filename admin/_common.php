@@ -19,7 +19,7 @@ function admin_header(string $title, bool $navigation = true): void
 </head><body class="admin-body"><header class="admin-header shell">
 <a class="brand" href="<?= h(app_url('admin/')) ?>"><img class="brand-logo" src="<?= h(app_url('assets/on-fencing-logo.svg')) ?>" alt="" width="120" height="36"><span>ONescrime · Admin</span></a>
 <?php if ($navigation): ?><nav aria-label="Administration">
-<a href="<?= h(app_url('admin/')) ?>">Tableau de bord</a><a href="<?= h(app_url('admin/events/')) ?>">Événements</a><a href="<?= h(app_url('admin/training/')) ?>">Entraînements</a><a href="<?= h(app_url('admin/messages/')) ?>">Messages</a>
+<a href="<?= h(app_url('admin/')) ?>">Tableau de bord</a><a href="<?= h(app_url('admin/events/')) ?>">Événements</a><a href="<?= h(app_url('admin/training/')) ?>">Entraînements</a><a href="<?= h(app_url('admin/messages/')) ?>">Messages</a><a href="<?= h(app_url('admin/gallery/')) ?>">Galerie</a>
 <a href="<?= h(app_url()) ?>">Voir le site</a>
 <form action="<?= h(app_url('admin/logout.php')) ?>" method="post"><?= csrf_field() ?><button type="submit" class="text-link">Déconnexion</button></form>
 </nav><?php endif; ?></header><main class="shell admin-main"><h1><?= h($title) ?></h1>

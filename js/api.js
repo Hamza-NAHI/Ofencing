@@ -37,6 +37,16 @@
       if (!Array.isArray(body.data)) throw new Error('Invalid training response.');
       return body.data;
     },
+    async getGalleryAlbums() {
+      const body = await request('gallery.php');
+      if (!Array.isArray(body.data)) throw new Error('Invalid gallery response.');
+      return body.data;
+    },
+    async getGalleryAlbum(id) {
+      const body = await request('gallery.php?album=' + encodeURIComponent(id));
+      if (!body.data?.album || !Array.isArray(body.data.photos)) throw new Error('Invalid album response.');
+      return body.data;
+    },
     sendContactMessage: formData => request('messages.php', { method: 'POST', body: formData })
   };
 })();

@@ -1,0 +1,15 @@
+# Only server-generated, re-encoded photos may be served from uploads.
+Options -Indexes -ExecCGI -MultiViews
+RemoveHandler .php .php3 .php4 .php5 .php7 .php8 .phtml .pht .phar .cgi .pl
+<FilesMatch "^(?![a-f0-9]{32}(?:-thumb)?\.(?:webp|jpg)$)">
+    Require all denied
+</FilesMatch>
+<FilesMatch "^[a-f0-9]{32}(?:-thumb)?\.(?:webp|jpg)$">
+    SetHandler none
+</FilesMatch>
+AddType image/webp .webp
+AddType image/jpeg .jpg
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header set Cache-Control "public, max-age=0, must-revalidate"
+</IfModule>

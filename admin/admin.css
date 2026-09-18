@@ -12,3 +12,11 @@
 .admin-notice,.admin-error{padding:18px;border-radius:12px;margin-bottom:24px;background:var(--matcha-soft)}.admin-error{background:var(--red-soft)}.admin-message{white-space:pre-wrap;overflow-wrap:anywhere;padding:24px;background:var(--cream);border-radius:18px}.admin-detail dt{font-weight:600}.admin-detail dd{margin:0 0 16px;overflow-wrap:anywhere}.admin-danger{background:var(--red-deep);color:white}.admin-pagination{margin-top:24px;display:flex;gap:20px;align-items:center}
 @media(max-width:760px){.admin-cards{grid-template-columns:repeat(2,1fr)}.admin-main{padding-block:30px}.admin-table th,.admin-table td{padding:12px}.admin-header nav{gap:14px}}
 @media(max-width:400px){.admin-cards{grid-template-columns:1fr}}
+
+/* Gallery follows the existing administration palette and form styles. */
+.admin-gallery-cover{object-fit:cover;border-radius:10px;width:100px;height:75px}
+.admin-upload{padding:24px;margin-bottom:32px;border:1px solid var(--line);border-radius:18px;background:var(--cream)}
+.admin-upload details{font-size:13px;color:var(--muted);margin-top:20px}.admin-upload summary{cursor:pointer}.admin-upload-results{padding-inline-start:20px;overflow-wrap:anywhere}.admin-upload-results li{margin-bottom:10px}
+.admin-gallery-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}.admin-photo{padding:18px;background:var(--cream);border:1px solid var(--line);border-radius:18px;min-width:0}.admin-photo>img{width:100%;height:220px;object-fit:contain;background:var(--paper);border-radius:10px}.admin-photo>.admin-muted{font-size:12px;margin-top:12px}.admin-photo .admin-form{gap:12px;margin-bottom:20px}.admin-photo .admin-actions{font-size:13px}.admin-photo button:disabled{opacity:.4;cursor:default}.admin-photo input,.admin-photo textarea{min-width:0}
+@media(max-width:1000px){.admin-gallery-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.admin-gallery-grid{grid-template-columns:minmax(0,1fr)}.admin-upload{padding:18px}}
