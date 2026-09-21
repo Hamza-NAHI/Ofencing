@@ -1,3 +1,4 @@
 <FilesMatch "^_">
     Require all denied
 </FilesMatch>
+LimitRequestBody 32768

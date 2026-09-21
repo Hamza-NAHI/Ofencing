@@ -6,6 +6,7 @@ start_session();
 if (!defined('ADMIN_PUBLIC_PAGE')) {
     requireAdmin();
 }
+enforce_request_limit(defined('OFENCING_IMAGE_UPLOAD') ? 20 * 1024 * 1024 : 32768);
 
 function admin_header(string $title, bool $navigation = true): void
 {

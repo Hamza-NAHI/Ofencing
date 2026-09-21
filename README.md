@@ -156,7 +156,7 @@ On public hosting, do setup only over HTTPS. The setup secret is sent by POST, n
 1. Admin → Événements → Nouvel événement. Choose a future date, enter title/location/type and publish it.
 2. Reload the homepage and `events.html`: it appears, ordered by date. The homepage shows the first three upcoming events. If three earlier events already exist, the new one appears on the full events page.
 3. Edit it, unpublish it, verify it disappears from the API/site, republish if desired, then delete it with confirmation.
-4. Published past events remain in `GET /api/events.php` and Admin, while the public sections headed “Upcoming” display today/future dates only. “Today” comes from the server in `APP_TIMEZONE`.
+4. PHP returns only published events dated today or later, using `APP_TIMEZONE`. Past events remain manageable in Admin, but are no longer sent to public browsers.
 
 **Admin → MySQL → API → Training**
 
@@ -177,8 +177,8 @@ On public hosting, do setup only over HTTPS. The setup secret is sent by POST, n
 1. Enable PHP with PDO MySQL, create a MySQL database and a dedicated database user in the hosting panel, and associate that user with the database. Hosts often prefix the database/user names with your account name.
 2. For a new, empty database, import `database/schema.sql` once through the host's phpMyAdmin. For an existing installation from the previous backend commit, back it up and import only `database/gallery.sql` once; do not re-import the full schema.
 3. Upload the public pages/assets, JavaScript, CSS, `404.php`, `api/`, `admin/`, `config/`, `uploads/.htaccess`, an empty `uploads/gallery/` for a new installation, and all other relevant `.htaccess` files into `public_html/` (or your chosen subfolder). Do **not** upload `.git`, tests, SQL exports or local test artifacts. The SQL file is only needed for import, not to serve the website.
-4. Create `config/local.php` using the actual database hostname, port, database, user and password from your host. Do not upload local XAMPP credentials. The production web account needs SELECT/INSERT/UPDATE/DELETE on this database; schema import may use a separate account.
-5. Enable the TLS certificate and **HTTPS redirect in the hosting panel**. Only then use the setup page and Admin. The application automatically marks session cookies Secure when PHP receives HTTPS. With a reverse proxy, configure the host to report HTTPS correctly; do not trust arbitrary client forwarding headers.
+4. Prefer a PHP configuration array outside `public_html`, for example `/home/account/private/ofencing.php`, and set the server environment variable `OFENCING_CONFIG_FILE` to its absolute path. Where the host cannot configure this, use the Apache-protected, Git-ignored `config/local.php`. Use actual hosting credentials, not local XAMPP credentials. The dedicated production database user needs SELECT/INSERT/UPDATE/DELETE on this database; use a separate maintenance account for schema import. Never use MySQL root in production.
+5. Enable the TLS certificate and **HTTPS redirect in the hosting panel**, then set `APP_REQUIRE_HTTPS` to `true` in production configuration. PHP rejects non-HTTPS requests in this mode; the hosting redirect also protects static pages. Only then use setup and Admin. Session cookies become Secure when the server reports HTTPS. With a reverse proxy, configure trusted server-side HTTPS reporting; arbitrary client forwarding headers are ignored. Leave this option `false` for HTTP localhost/XAMPP.
 6. Run the one-time admin setup, erase its secret, and confirm login at `https://YOUR-DOMAIN/admin/` (include your subfolder if applicable).
 7. Remove/unpublish example events and inactive/unconfirmed schedule entries, and enter verified availability. Confirm the placeholder WhatsApp/contact information with Omar.
 8. Update the existing absolute canonical/Open Graph/image URLs, `robots.txt` and `sitemap.xml` together for the real domain. Metadata was preserved in this change, so it still refers to the existing Vercel origin until you replace it.
@@ -192,7 +192,7 @@ All API responses are JSON with `Content-Type: application/json; charset=utf-8` 
 
 | Endpoint | Method | Access / behavior |
 | --- | --- | --- |
-| `api/events.php` | GET | Published events ordered by `event_date`, then ID; includes server `today` (`YYYY-MM-DD`). |
+| `api/events.php` | GET | Published upcoming events ordered by `event_date`, then ID. Only date/title/description/location/type are returned. |
 | `api/training.php` | GET | Active slots ordered by `display_order`, weekday, start time, ID. |
 | `api/gallery.php` | GET | Published albums with photo counts and cover URLs. |
 | `api/gallery.php?album=ID` | GET | Published album metadata and ordered photos; draft/missing albums return 404. |
@@ -204,6 +204,8 @@ All API responses are JSON with `Content-Type: application/json; charset=utf-8` 
 **POST actions** avoid PUT/DELETE restrictions on shared hosting. Supply `action=create` (default), `action=update`, or `action=delete`. For update/delete supply a positive integer `id` in the body or query. Update sends all editable fields, not a partial patch. Submit JSON (`application/json`), URL-encoded data, or FormData. Unsupported methods return 405 and an `Allow` header.
 
 Admin API writes require the login session cookie and `csrf_token` in the body or `X-CSRF-Token` header; the token is available in Admin form hidden fields. No token or secret is embedded in public JavaScript. Missing checkbox flags mean `0`; use `1` for published/active. Training weekdays are ISO numbers: Monday `1` to Sunday `7`; times are `HH:MM`; order is `0`–`9999`.
+
+Public events/training no longer include record IDs, timestamps, publication flags or internal ordering values. Training returns only `day_of_week`, `start_time`, `end_time`, `type` and `location`. Authenticated event/training write responses return only the affected ID. Contact accepts an optional empty `website` honeypot; it is never stored. Unknown submitted fields never become database columns or trusted server metadata.
 
 Validation errors return 422, malformed JSON 400, unsupported body types 415, oversized API payloads 413 (32 KiB maximum), missing records 404, unauthenticated writes 401, invalid CSRF 403, rate limits 429 with `Retry-After`, database/unexpected failures 503. Database details and stack traces are never returned to clients. Content is treated as plain text and escaped on both public and Admin screens.
 
@@ -220,7 +222,11 @@ Validation errors return 422, malformed JSON 400, unsupported body types 415, ov
 
 All database operations use PDO prepared statements. SQL identifiers in the small shared CRUD helpers are allowlisted, and integer pagination offsets are calculated from validated values. Passwords use `password_hash` / `password_verify`; session IDs rotate on login. Public content and Admin output are HTML-escaped. Every Admin mutation (including logout/read status) requires CSRF; GET requests never perform writes.
 
-A small filesystem rate limiter limits contact requests to **5 per 10 minutes per IP**, login attempts to **10 per 15 minutes per IP**, and setup attempts to **5 per 15 minutes per IP**. It uses server-reported IPs and atomic file locks in the PHP temporary directory. It does not replace hosting-level anti-abuse controls; users behind the same IP share the allowance. No third-party CAPTCHA or email dependency is introduced.
+A small filesystem rate limiter limits contact requests to **5 per 10 minutes per IP**, login attempts to **10 per 15 minutes per IP** (cleared on successful login), and setup attempts to **5 per 15 minutes per IP**. Gallery uploads allow **100 submitted images and 120 requests per 10 minutes per administrator**, across sessions; rejected images consume the image budget too. It uses server-reported IPs, private storage and atomic file locks in the PHP temporary directory, with bounded state size. It does not replace hosting-level anti-abuse controls; users behind the same IP share the allowance. No third-party CAPTCHA or email dependency is introduced.
+
+All ordinary Admin/API bodies are capped at **32 KiB**; the upload route is capped at **20 MiB** per request, in addition to PHP limits and the 15 MiB per-image cap. Apache also enforces ingress limits, including before PHP processes multipart bodies. Password-hash replacement or administrator deletion revokes existing authenticated sessions on their next request. Existing sessions from before this update require a fresh login.
+
+The enforced CSP permits local scripts only, without `unsafe-inline` or `unsafe-eval`; Google Fonts CSS (`fonts.googleapis.com`) and fonts (`fonts.gstatic.com`) are the only external subresource allowances. It blocks framing, objects and injected base URLs. PHP and Apache send `nosniff`, a strict referrer policy, disabled unused browser permissions and frame protection. Failed logins, CSRF rejection, upload validation failures, rate limits and unexpected errors produce bounded server-side security events without passwords, cookies, session IDs, message content or SQL. Keep logs private and rotate them.
 
 ### 8. Limitations and maintenance
 
@@ -242,6 +248,8 @@ Set `OFENCING_TEST_BASE_URL` (for example `http://localhost/ofencing/`), `OFENCI
 The implementation was checked with PHP 8.3, MariaDB 10.11 and Apache 2.4, at both the domain root and `/ofencing/`: public reads, real contact inserts, all Admin/API CRUD operations, publication/activation filtering, sorting, escaped Unicode content, malformed/oversized input, invalid IDs, authentication, CSRF, logout, throttling, safe 503 JSON on database failure, denied private files and the branded nested 404. Windows XAMPP and the final hosting account still require the deployment checks above.
 
 Browser verification also covered real form submission and Admin-created data, FR/EN/AR including RTL, mobile navigation and layouts, long administrator-entered titles, escaped HTML, empty/unavailable states, preserved form input after failures, disabled sending buttons and the 404 adapter. Those backend changes retain the existing public design. Gallery-specific styles are isolated in `gallery.css`.
+
+See [docs/security-audit.md](docs/security-audit.md) for the complete 45-area review, actual findings, fixes, test evidence and remaining deployment requirements. `tests/security_integration.py` adds adversarial HTTP tests using the same local-only environment variables as the gallery test below and requires Pillow only for development fixtures. It deliberately exhausts local login/upload limits; use a disposable installation and wait for limits to expire between runs. This security update requires **no database migration** and adds no production dependency.
 
 ## Gallery
 
@@ -312,8 +320,8 @@ The PHP temporary original is deleted after processing; it is never moved to pub
 
 `gallery.html` first renders published album covers/counts; `gallery.html?album=12` shows that album's title, description, date, location, count and ordered grid. Grids use lazy-loaded **thumbnails only**. An optimized larger image loads on opening the native-dialog viewer. It supports previous/next, Escape, arrow keys, touch swipes, focus trapping/restoration and labelled buttons. Layouts use four/three/two photo columns for desktop/tablet/mobile. The surrounding site design, logo and FR/EN/AR behavior are retained, including RTL. Administrator-entered album text/captions are not machine-translated. Empty albums, missing images, unavailable API and missing/unpublished albums have readable states.
 
-- `GET api/gallery.php` returns `{ "success": true, "data": [ ...albums ] }`, ordered by display order then newest first. Each album has `id`, `title`, `description`, `slug`, `event_date`, `location`, `photo_count`, and a `cover` photo or `null`.
-- `GET api/gallery.php?album=12` returns `{ "success": true, "data": { "album": {...}, "photos": [...] } }`. A photo contains `id`, `caption`, `alt_text`, `width`, `height`, `thumbnail_url` and `image_url`. No server filesystem paths, original filenames or unpublished records are returned, including to logged-in visitors using this public endpoint. Draft/missing IDs return 404; malformed IDs return 422; non-GET methods return 405.
+- `GET api/gallery.php` returns `{ "success": true, "data": [ ...albums ] }`, ordered by display order then newest first. Each album has `id` (needed for its public route), `title`, `location`, `photo_count`, and `cover` (`thumbnail_url`/`alt_text`, or `null`).
+- `GET api/gallery.php?album=12` returns `{ "success": true, "data": { "album": {...}, "photos": [...] } }`. Album detail additionally includes `description` and `event_date`. A photo contains only `caption`, `alt_text`, `thumbnail_url` and `image_url`. No photo IDs, slugs, stored dimensions, internal flags, server filesystem paths, original filenames or unpublished records are returned, including to logged-in visitors using this public endpoint. Draft/missing IDs return 404; malformed IDs return 422; non-GET methods return 405.
 - Admin writes remain under authenticated `admin/gallery/*.php`, with prepared SQL and CSRF protection. `upload.php?id=12` accepts multipart `photos[]`; `Accept: application/json` selects the upload queue response. It returns 201 for complete success, 200 for mixed success, or 422 when no photo succeeds, with per-file results. Missing session/CSRF return 401/403 in JSON mode. PHP request-size overflow returns 413 when the request reaches PHP.
 
 ### Test locally

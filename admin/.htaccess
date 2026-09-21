@@ -1,4 +1,5 @@
 DirectoryIndex index.php
+LimitRequestBody 32768
 <FilesMatch "^_">
     Require all denied
 </FilesMatch>

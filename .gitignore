@@ -3,3 +3,12 @@
 /tests/.artifacts/
 /uploads/gallery/*
 !/uploads/gallery/.gitkeep
+/.env
+/.env.*
+*.bak
+*.old
+*.orig
+*.swp
+*.sql.gz
+*.pem
+*.key

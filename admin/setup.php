@@ -20,8 +20,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             throw new InvalidArgumentException('Identifiant : 3 à 64 lettres, chiffres, points, tirets ou underscores.');
         }
         $password = $_POST['password'] ?? '';
-        if (!is_string($password) || strlen($password) < 12 || strlen($password) > 72 || str_contains($password, "\0")) {
-            throw new InvalidArgumentException('Choisissez un mot de passe de 12 à 72 octets.');
+        if (!is_string($password) || !preg_match('//u', $password) || preg_match_all('/./us', $password) < 12
+            || strlen($password) > 72 || str_contains($password, "\0")) {
+            throw new InvalidArgumentException('Choisissez au moins 12 caractères, dans la limite de 72 octets.');
         }
         if ($password !== ($_POST['password_confirm'] ?? '')) {
             throw new InvalidArgumentException('Les mots de passe ne correspondent pas.');

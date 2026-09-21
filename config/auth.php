@@ -9,13 +9,16 @@ function start_session(): void
     }
     ini_set('session.use_strict_mode', '1');
     ini_set('session.use_only_cookies', '1');
+    ini_set('session.use_trans_sid', '0');
     session_name('ofencing_' . substr(hash('sha256', dirname(__DIR__)), 0, 12));
     session_set_cookie_params([
         'lifetime' => 0, 'path' => app_url(),
-        'secure' => !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off',
+        'secure' => request_is_https(),
         'httponly' => true, 'samesite' => 'Lax',
     ]);
-    session_start();
+    if (!session_start()) {
+        throw new RuntimeException('Session storage unavailable.');
+    }
     header('Cache-Control: no-store');
     header('X-Robots-Tag: noindex, nofollow');
     header('X-Content-Type-Options: nosniff');
@@ -33,8 +36,12 @@ function isAdminLoggedIn(): bool
         session_regenerate_id(true);
         return false;
     }
-    if (!query('SELECT id FROM admin_users WHERE id = ?', [$_SESSION['admin_id']])->fetch()) {
+    $user = query('SELECT id, password_hash FROM admin_users WHERE id = ?', [$_SESSION['admin_id']])->fetch();
+    if (!$user || !isset($_SESSION['credential_stamp'])
+        || !hash_equals(hash('sha256', $user['password_hash']), (string) $_SESSION['credential_stamp'])) {
+        security_log('session_revoked');
         $_SESSION = [];
+        session_regenerate_id(true);
         return false;
     }
     $_SESSION['last_activity'] = time();
@@ -65,6 +72,7 @@ function verifyCsrf($token = null): void
     start_session();
     $token = $token ?? ($_POST['csrf_token'] ?? $_SERVER['HTTP_X_CSRF_TOKEN'] ?? '');
     if (!is_string($token) || empty($_SESSION['csrf']) || !hash_equals($_SESSION['csrf'], $token)) {
+        security_log('csrf_rejected');
         fail_request('Session expired or invalid security token. Reload the page and try again.', 403);
     }
 }
@@ -79,6 +87,7 @@ function login_admin(array $user): void
     start_session();
     session_regenerate_id(true);
     $_SESSION = ['admin_id' => (int) $user['id'], 'username' => $user['username'],
+        'credential_stamp' => hash('sha256', $user['password_hash']),
         'login_time' => time(), 'last_activity' => time(), 'csrf' => bin2hex(random_bytes(32))];
 }
 

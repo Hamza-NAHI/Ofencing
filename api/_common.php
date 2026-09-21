@@ -9,9 +9,7 @@ header('X-Content-Type-Options: nosniff');
 
 function request_data(): array
 {
-    if ((int) ($_SERVER['CONTENT_LENGTH'] ?? 0) > 32768) {
-        fail_request('Request too large.', 413);
-    }
+    enforce_request_limit();
     $type = strtolower(trim(explode(';', $_SERVER['CONTENT_TYPE'] ?? '')[0]));
     if ($type === 'application/json') {
         $raw = file_get_contents('php://input', false, null, 0, 32769);
@@ -44,9 +42,9 @@ function content_api(string $kind): void
     $method = $_SERVER['REQUEST_METHOD'];
     if ($method === 'GET') {
         $sql = $kind === 'events'
-            ? 'SELECT id, event_date, title, description, location, type FROM events WHERE is_published = 1 ORDER BY event_date, id'
-            : 'SELECT id, day_of_week, start_time, end_time, type, location, display_order FROM training WHERE is_active = 1 ORDER BY display_order, day_of_week, start_time, id';
-        json_response(['success' => true, 'data' => query($sql)->fetchAll(), 'today' => date('Y-m-d')]);
+            ? 'SELECT event_date, title, description, location, type FROM events WHERE is_published = 1 AND event_date >= ? ORDER BY event_date, id'
+            : 'SELECT day_of_week, start_time, end_time, type, location FROM training WHERE is_active = 1 ORDER BY display_order, day_of_week, start_time, id';
+        json_response(['success' => true, 'data' => query($sql, $kind === 'events' ? [date('Y-m-d')] : [])->fetchAll()]);
     }
     require_method('POST');
     requireAdmin();
@@ -81,5 +79,5 @@ function content_api(string $kind): void
         $assignments = implode(', ', array_map(static fn($key) => "$key = ?", array_keys($data)));
         query("UPDATE $kind SET $assignments WHERE id = ?", [...array_values($data), $id]);
     }
-    json_response(['success' => true, 'data' => ['id' => $id] + $data], $action === 'create' ? 201 : 200);
+    json_response(['success' => true, 'data' => ['id' => $id]], $action === 'create' ? 201 : 200);
 }

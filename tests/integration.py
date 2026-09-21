@@ -75,6 +75,12 @@ def data(path):
     return json.loads(public.request(path)[0])['data']
 
 
+def admin_record_id(resource, text):
+    listing = admin.request('admin/' + resource + '/')[0]
+    row = next(row for row in re.findall(r'<tr>(.*?)</tr>', listing, re.S) if html.escape(text, quote=True) in row)
+    return int(re.search(r'edit\.php\?id=(\d+)', row)[1])
+
+
 def post(client, path, values, expected=303, as_json=False):
     return client.request(path, expected, 'POST', values, as_json)
 
@@ -127,42 +133,42 @@ event = {'event_date': '2099-10-24', 'title': PREFIX + ' ' + xss, 'description':
 post(admin, 'admin/events/create.php', {**event, 'event_date': '2099-02-31'}, 422)
 post(admin, 'admin/events/create.php', event)
 created = next(row for row in data('api/events.php') if row['title'] == event['title'])
-event_id = int(created['id'])
+event_id = admin_record_id('events', event['title'])
 assert [row['event_date'] for row in data('api/events.php')] == sorted(row['event_date'] for row in data('api/events.php'))
 text, _ = admin.request('admin/events/')
 assert html.escape(xss, quote=True) in text and xss not in text
 text, _ = admin.request(f'admin/events/delete.php?id={event_id}')
 assert 'Confirmer la suppression' in text
-assert any(int(row['id']) == event_id for row in data('api/events.php')), 'GET must not delete'
+assert any(row['title'] == event['title'] for row in data('api/events.php')), 'GET must not delete'
 post(admin, f'admin/events/edit.php?id={event_id}', {**event, 'is_published': '0'})
-assert not any(int(row['id']) == event_id for row in data('api/events.php'))
+assert not any(row['title'] == event['title'] for row in data('api/events.php'))
 post(admin, 'api/events.php', {**event, 'id': event_id, 'action': 'update'}, 200, True)
-assert any(int(row['id']) == event_id for row in data('api/events.php'))
+assert any(row['title'] == event['title'] for row in data('api/events.php'))
 text, _ = post(admin, 'api/events.php', {**event, 'title': PREFIX + '-draft', 'is_published': False}, 201, True)
 draft_id = json.loads(text)['data']['id']
-assert not any(int(row['id']) == draft_id for row in data('api/events.php'))
+assert not any(row['title'] == PREFIX + '-draft' for row in data('api/events.php'))
 post(admin, 'api/events.php', {'csrf_token': csrf, 'action': 'delete', 'id': draft_id}, 200, True)
 post(admin, f'admin/events/delete.php?id={event_id}', {'csrf_token': 'wrong'}, 403)
 post(admin, f'admin/events/delete.php?id={event_id}', {'csrf_token': csrf})
-assert not any(int(row['id']) == event_id for row in data('api/events.php'))
+assert not any(row['title'] == event['title'] for row in data('api/events.php'))
 print('PASS events form/API CRUD, chronological order, publishing, escaping and confirmed deletion')
 
 slot = {'day_of_week': 7, 'start_time': '10:00', 'end_time': '12:00', 'type': PREFIX,
         'location': 'الرباط', 'display_order': 1, 'is_active': 1, 'csrf_token': csrf}
 post(admin, 'admin/training/create.php', {**slot, 'end_time': '09:00'}, 422)
 post(admin, 'admin/training/create.php', slot)
-slot_id = int(next(row['id'] for row in data('api/training.php') if row['type'] == PREFIX))
+slot_id = admin_record_id('training', PREFIX)
 post(admin, f'admin/training/edit.php?id={slot_id}', {**slot, 'is_active': 0})
-assert not any(int(row['id']) == slot_id for row in data('api/training.php'))
+assert not any(row['type'] == PREFIX for row in data('api/training.php'))
 post(admin, 'api/training.php', {**slot, 'id': slot_id, 'action': 'update', 'display_order': 0}, 200, True)
-assert int(data('api/training.php')[0]['id']) == slot_id
+assert data('api/training.php')[0]['type'] == PREFIX
 text, _ = post(admin, 'api/training.php', {**slot, 'type': PREFIX + '-inactive', 'is_active': 0}, 201, True)
 other_id = json.loads(text)['data']['id']
-assert not any(int(row['id']) == other_id for row in data('api/training.php'))
+assert not any(row['type'] == PREFIX + '-inactive' for row in data('api/training.php'))
 post(admin, 'api/training.php', {'csrf_token': csrf, 'action': 'delete', 'id': other_id}, 200, True)
 admin.request(f'admin/training/delete.php?id={slot_id}')
 post(admin, f'admin/training/delete.php?id={slot_id}', {'csrf_token': csrf})
-assert not any(int(row['id']) == slot_id for row in data('api/training.php'))
+assert not any(row['type'] == PREFIX for row in data('api/training.php'))
 print('PASS training form/API CRUD, time validation, active visibility and display order')
 
 message = {'name': PREFIX, 'contact': 'test@example.com', 'level': 'Beginner', 'message': xss}

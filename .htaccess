@@ -1,6 +1,7 @@
 # Apache 2.4 / XAMPP / ordinary PHP shared hosting. No front controller or build.
 Options -Indexes -MultiViews
 DirectoryIndex index.html index.php
+LimitRequestBody 20971520
 
 # Relative rules preserve both domain-root and subdirectory installations.
 # Missing requests reach the existing branded 404 through a small PHP adapter.
@@ -8,18 +9,23 @@ DirectoryIndex index.html index.php
     RewriteEngine On
     RewriteRule (^|/)\. - [F,L]
     RewriteRule ^(?:config|database|tests|docs)(?:/|$) - [F,L,NC]
-    RewriteRule ^(?:README\.md|.*\.(?:sql|log|bak|ini))$ - [F,L,NC]
+    RewriteRule ^(?:README\.md|.*(?:\.(?:sql|log|bak|backup|old|orig|save|tmp|temp|swp|swo|ini|env|zip|tar|tgz|gz|7z|rar|pem|key)(?:\..*)?|~))$ - [F,L,NC]
     RewriteRule ^(?:api|admin)/_ - [F,L]
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule ^ 404.php [L]
 </IfModule>
 
-<FilesMatch "(^\.|\.(sql|log|bak|ini)$|^README\.md$)">
+<FilesMatch "(?i)(^\.|\.(sql|log|bak|backup|old|orig|save|tmp|temp|swp|swo|ini|env|zip|tar|tgz|gz|7z|rar|pem|key)(\..*)?$|~$|^README\.md$)">
     Require all denied
 </FilesMatch>
 <IfModule mod_headers.c>
+    Header onsuccess unset Content-Security-Policy
+    Header onsuccess unset X-Frame-Options
     Header always set X-Content-Type-Options "nosniff"
     Header always set Referrer-Policy "strict-origin-when-cross-origin"
-    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set X-Frame-Options "DENY"
+    Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self'; script-src-attr 'none'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'"
+    Header always unset X-Powered-By
 </IfModule>

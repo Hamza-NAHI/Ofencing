@@ -111,7 +111,7 @@ function gallery_access(int $albumId, bool $published): void
 }
 
 // Serialize upload/order/cover/edit/delete operations on the same album.
-function gallery_write(int $albumId, callable $operation)
+function gallery_write(int $albumId, callable $operation, ?callable $onFailure = null)
 {
     $pdo = db();
     $pdo->beginTransaction();
@@ -121,8 +121,15 @@ function gallery_write(int $albumId, callable $operation)
         $pdo->commit();
         return $result;
     } catch (Throwable $error) {
-        if ($pdo->inTransaction()) {
-            $pdo->rollBack();
+        try {
+            // Restore/remove staged files BEFORE releasing the album row lock.
+            if ($onFailure) {
+                $onFailure();
+            }
+        } finally {
+            if ($pdo->inTransaction()) {
+                $pdo->rollBack();
+            }
         }
         throw $error;
     }
@@ -160,34 +167,37 @@ function gallery_create_album(array $data): int
 
 function gallery_update_album(int $id, array $data): void
 {
-    try {
-        gallery_write($id, static function () use ($id, $data): void {
-            // Close static access before unpublishing; Apache also protects known image URLs.
-            gallery_access($id, (bool) $data['is_published']);
-            query('UPDATE gallery_albums SET title = ?, description = ?, event_date = ?, location = ?, is_published = ?, display_order = ? WHERE id = ?', [...array_values($data), $id]);
-        });
-    } catch (Throwable $error) {
-        // A failed publication must never leave a draft's images accessible.
-        if (is_dir(gallery_directory($id))) {
+    gallery_write($id, static function () use ($id, $data): void {
+        if (!$data['is_published']) {
             gallery_access($id, false);
         }
-        throw $error;
+        query('UPDATE gallery_albums SET title = ?, description = ?, event_date = ?, location = ?, is_published = ?, display_order = ? WHERE id = ?', [...array_values($data), $id]);
+    });
+    if ($data['is_published']) {
+        gallery_sync_access($id);
     }
 }
 
 function gallery_publish_album(int $id, bool $published): void
 {
-    try {
-        gallery_write($id, static function () use ($id, $published): void {
-            gallery_access($id, $published);
-            query('UPDATE gallery_albums SET is_published = ? WHERE id = ?', [(int) $published, $id]);
-        });
-    } catch (Throwable $error) {
-        if (is_dir(gallery_directory($id))) {
+    gallery_write($id, static function () use ($id, $published): void {
+        if (!$published) {
             gallery_access($id, false);
         }
-        throw $error;
+        query('UPDATE gallery_albums SET is_published = ? WHERE id = ?', [(int) $published, $id]);
+    });
+    if ($published) {
+        gallery_sync_access($id);
     }
+}
+
+function gallery_sync_access(int $id): void
+{
+    // Open access only AFTER the DB commit. Re-lock/re-read to respect a concurrent unpublish.
+    // Interruption here leaves a published album temporarily inaccessible, never a public draft.
+    gallery_write($id, static function (array $album) use ($id): void {
+        gallery_access($id, (bool) $album['is_published']);
+    });
 }
 
 function gallery_remove_empty_directory(int $id): bool
@@ -208,6 +218,15 @@ function gallery_delete(int $albumId, ?int $photoId = null): bool
     // Stage files privately on the same filesystem so a DB failure can restore them.
     $moved = [];
     $trash = dirname(__DIR__) . '/uploads/gallery/.trash-' . bin2hex(random_bytes(16));
+    $restored = true;
+    $restore = static function () use (&$moved, &$restored): void {
+        foreach ($moved as $source => $target) {
+            if (!@rename($target, $source)) {
+                $restored = false;
+                security_log('gallery_recovery_required');
+            }
+        }
+    };
     try {
         gallery_write($albumId, static function () use ($albumId, $photoId, $trash, &$moved): void {
             $photos = $photoId ? [gallery_photo($photoId, $albumId)] : gallery_photos($albumId);
@@ -236,15 +255,8 @@ function gallery_delete(int $albumId, ?int $photoId = null): bool
                     }
                 }
             }
-        });
+        }, $restore);
     } catch (Throwable $error) {
-        $restored = true;
-        foreach ($moved as $source => $target) {
-            if (!@rename($target, $source)) {
-                $restored = false;
-                error_log('ONescrime gallery: deletion rollback requires storage recovery.');
-            }
-        }
         if ($restored) {
             @unlink($trash . '/.htaccess');
             @rmdir($trash);

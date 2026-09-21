@@ -77,6 +77,10 @@ function training_input(array $input): array
 
 function message_input(array $input): array
 {
+    if (field($input, 'website', 200, false) !== '') {
+        security_log('contact_honeypot_rejected');
+        throw new InvalidArgumentException('Invalid form submission.');
+    }
     $contact = field($input, 'contact', 254);
     $phone = preg_match('/^\+?[0-9][0-9\s().-]*$/D', $contact)
         && preg_match('/^[0-9]{7,15}$/D', preg_replace('/\D/', '', $contact));

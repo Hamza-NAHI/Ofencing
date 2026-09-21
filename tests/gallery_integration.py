@@ -131,7 +131,7 @@ try:
         if APACHE:public.request(f'uploads/gallery/album-{a}/{stored[0].name}',403)
     publish(a,1)
     detail=album(a)['data'];photos=detail['photos']
-    assert len(photos)==3 and detail['album']['cover']['id']==record['id']
+    assert len(photos)==3 and detail['album']['cover']['thumbnail_url']==photos[0]['thumbnail_url']
     assert 'original_filename' not in json.dumps(detail) and '/workspace/' not in json.dumps(detail)
     paths=[]
     for photo in photos:
@@ -142,9 +142,9 @@ try:
             if REPO:paths.append(local_image_path(photo[key]));assert paths[-1].is_file()
     print(f'PASS mixed multi-upload, {len(camera)} → {record["stored_bytes"]} bytes, 6000×4000 → 1920×1280, 640px thumbs, no upscaling, EXIF and static draft privacy')
     admin.post('admin/gallery/set-cover.php',{'csrf_token':csrf,'album_id':a,'photo_id':second['id']})
-    assert album(a)['data']['album']['cover']['id']==second['id']
+    assert album(a)['data']['album']['cover']['thumbnail_url']==photos[1]['thumbnail_url']
     admin.post('admin/gallery/reorder.php',{'csrf_token':csrf,'album_id':a,'photo_id':rotated['id'],'direction':'up'})
-    assert [p['id'] for p in album(a)['data']['photos']]==[record['id'],rotated['id'],second['id']]
+    assert [p['image_url'] for p in album(a)['data']['photos']]==[photos[0]['image_url'],photos[2]['image_url'],photos[1]['image_url']]
     admin.post('admin/gallery/save-photo.php',{'csrf_token':csrf,'album_id':a,'photo_id':record['id'],'caption':'Caption <svg onload=alert(1)>','alt_text':'مرحبا sur la piste'})
     detail=album(a)['data'];assert detail['photos'][0]['alt_text']=='مرحبا sur la piste'
     html=admin.request(f'admin/gallery/album.php?id={a}')[0].decode()
@@ -171,9 +171,9 @@ try:
     upload(a,[('bomb.png',bomb,'image/png')],422)
     assert len(album(a)['data']['photos'])==3
     # Selected cover deletion must remove both files and fall back to the first remaining photo.
-    selected=next(p for p in photos if p['id']==second['id'])
+    selected=photos[1]
     remove_photo(a,second['id'])
-    assert album(a)['data']['album']['cover']['id']==record['id']
+    assert album(a)['data']['album']['cover']['thumbnail_url']==photos[0]['thumbnail_url']
     if REPO:
         assert not local_image_path(selected['image_url']).exists()
         assert not local_image_path(selected['thumbnail_url']).exists()

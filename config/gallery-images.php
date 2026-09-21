@@ -165,6 +165,12 @@ function gallery_store_upload(int $albumId, array $file): array
             return ['id' => (int) db()->lastInsertId(), 'name' => $original, 'success' => true,
                 'width' => imagesx($large), 'height' => imagesy($large), 'source_bytes' => $size,
                 'stored_bytes' => filesize($files[0]) + filesize($files[1]), 'format' => $webp ? 'webp' : 'jpeg'];
+        }, static function () use ($files): void {
+            foreach ($files as $stored) {
+                if (is_file($stored) && !@unlink($stored)) {
+                    security_log('upload_cleanup_failed');
+                }
+            }
         });
         return $result;
     } catch (Throwable $error) {

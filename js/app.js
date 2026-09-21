@@ -17,7 +17,7 @@ if (toggle && nav) {
   const calendar = document.getElementById('training-calendar');
   if (!homeEvents && !allEvents && !calendar) return;
 
-  const state = { events: null, training: null, eventsError: false, trainingError: false, today: '' };
+  const state = { events: null, training: null, eventsError: false, trainingError: false };
   const escape = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const t = key => escape(window.siteI18n?.t(key) ?? key);
   const locale = () => ({ fr: 'fr-FR', en: 'en-GB', ar: 'ar-MA' }[window.siteI18n?.language] || 'fr-FR');
@@ -38,9 +38,8 @@ if (toggle && nav) {
     [homeEvents, allEvents].filter(Boolean).forEach(element => {
       if (state.eventsError) return status(element, 'Events are temporarily unavailable. Please try again later.');
       if (state.events === null) return status(element, 'Loading events…', true);
-      // These sections promise upcoming dates. The API also returns published past events.
-      const upcoming = state.events.filter(event => event.event_date >= state.today);
-      const events = element === homeEvents ? upcoming.slice(0, 3) : upcoming;
+      // PHP chooses published/upcoming records; slicing only changes the home layout.
+      const events = element === homeEvents ? state.events.slice(0, 3) : state.events;
       if (!events.length) return status(element, 'No upcoming events. Please check back soon.');
       element.setAttribute('aria-busy', 'false');
       const cards = events.map(event => {
@@ -85,7 +84,6 @@ if (toggle && nav) {
   if (homeEvents || allEvents) {
     Promise.resolve().then(() => window.siteAPI.getEvents()).then(body => {
       state.events = body.data;
-      state.today = body.today;
       renderEvents();
     }).catch(() => { state.eventsError = true; renderEvents(); });
   }

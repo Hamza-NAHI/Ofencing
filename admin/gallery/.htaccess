@@ -1,3 +1,6 @@
 <FilesMatch "^_">
     Require all denied
 </FilesMatch>
+<Files "upload.php">
+    LimitRequestBody 20971520
+</Files>

@@ -3,6 +3,8 @@
 (() => {
   const scriptURL = document.currentScript.src;
   const base = new URL(window.API_BASE || '../api/', scriptURL);
+  // UX/privacy guard only; PHP independently authorizes every privileged operation.
+  if (base.origin !== location.origin) throw new Error('The API must use the same origin.');
   if (!base.pathname.endsWith('/')) base.pathname += '/';
 
   async function request(endpoint, options = {}) {
@@ -29,7 +31,7 @@
   window.siteAPI = {
     async getEvents() {
       const body = await request('events.php');
-      if (!Array.isArray(body.data) || !/^\d{4}-\d{2}-\d{2}$/.test(body.today)) throw new Error('Invalid events response.');
+      if (!Array.isArray(body.data)) throw new Error('Invalid events response.');
       return body;
     },
     async getTraining() {

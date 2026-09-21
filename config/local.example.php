@@ -9,6 +9,8 @@ return [
     'APP_TIMEZONE' => 'Africa/Casablanca',
     // Usually detected automatically. Set '/ofencing' only if detection needs overriding.
     'APP_BASE_PATH' => null,
+    // Production only: enable AFTER configuring HTTPS at the host. Keep false on XAMPP HTTP.
+    'APP_REQUIRE_HTTPS' => false,
     // Temporary random secret (at least 32 characters) to enable admin/setup.php.
     // Remove it immediately after creating the first administrator.
     'SETUP_TOKEN' => '',
